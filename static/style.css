@@ -6,6 +6,16 @@
     margin: auto;
 }
 
+input:focus {
+    outline: none;
+}
+
+.login-text-box {
+    background-color: rgb(243, 235, 235);
+    border: none;
+    padding: 6px;
+}
+
 .no-account {
     border-radius: 16px;
     padding: 8px;
@@ -14,7 +24,7 @@
 }
 
 .no-account p {
-    font-size: 20px;
+    font-size: 15px;
 }
 
 .login-greeting {
@@ -30,4 +40,10 @@
     font-weight: bold;
     padding-top: 10px;
     margin-top: 10px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }

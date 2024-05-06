@@ -10,18 +10,18 @@
             <p>The easy way to track your goals</p>
         </div>
         <div class="container-fluid login-box">
-            <form method="post" action="/login">
-                <input type="text" placeholder="username" autofocus name="username"><br>
+            <form class="login-form" method="post" action="/login">
+                <input class="login-text-box" type="text" placeholder="username" autofocus name="username"><br>
                 <br>
-                <input type="password" placeholder="password" name="password"><br><br>
-                <button class="btn btn-primary" type="submit">Log In</button>
+                <input class="login-text-box" type="password" placeholder="password" name="password"><br><br>
+                <button class="btn btn-primary" type="submit">LOGIN</button>
             </form>
             {% if errormsg %}
                 <div class="container-sm bg-danger login-error">
                     <p>{{ errormsg }}</p>
                 </div>
             {% endif %}
-            <div class="bg-info no-account">
+            <div class="no-account">
                 <p>No account? Register today to see how Tracker can help improve your life
                     by tracking your goals.</p>
                 <button class="btn btn-primary" type="button">Register</button>
