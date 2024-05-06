@@ -3,6 +3,7 @@ import sqlite3
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
 
 @app.route("/")
 def index():
@@ -35,7 +36,6 @@ def register():
             return render_template("register.html", errormsg=errormsg)
         #If username does not exist, hash password and store it in database.
         cur_writeuser = con.cursor()
-        bcrypt = Bcrypt(app)
         hashed_password = bcrypt.generate_password_hash(form_password).decode('utf-8')
         cur_writeuser.execute("INSERT INTO users (username, hash) VALUES(?, ?)", (form_username, hashed_password,))
         con.commit()
@@ -61,7 +61,8 @@ def login():
         #user_hash is assigned to the row selected, 2nd index is hash.
         user_hash = username_res[0][2]
         password_plaintext = request.form.get("password")
-        if password_plaintext == user_hash:
+        is_password_valid = bcrypt.check_password_hash(user_hash, password_plaintext)
+        if is_password_valid:
             return redirect("/")
         else:
             errormsg = "Password is incorrect. Please try again."
