@@ -11,12 +11,16 @@
         </div>
         <div class="container-fluid login-box">
             <form method="post" action="/login">
-                <label for="username">Username</label><br>
-                <input type="text" autofocus name="username"><br>
-                <label for="password">Password</label><br>
-                <input type="password" name="password"><br><br>
+                <input type="text" placeholder="username" autofocus name="username"><br>
+                <br>
+                <input type="password" placeholder="password" name="password"><br><br>
                 <button class="btn btn-primary" type="submit">Log In</button>
             </form>
+            {% if errormsg %}
+                <div class="container-sm bg-danger login-error">
+                    <p>{{ errormsg }}</p>
+                </div>
+            {% endif %}
             <div class="bg-info no-account">
                 <p>No account? Register today to see how Tracker can help improve your life
                     by tracking your goals.</p>

@@ -23,3 +23,11 @@
     flex-direction: column;
     font-family: Georgia, serif;
 }
+
+.login-error {
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    padding-top: 10px;
+    margin-top: 10px;
+}
