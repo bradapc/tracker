@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block header %}
-    <h1>{% block title %}Login{% endblock %}</h1>
+    <h1>{% block title %}Register{% endblock %}</h1>
 {% endblock %}
 
 {% block body %}
@@ -10,20 +10,17 @@
             <p>The easy way to track your goals</p>
         </div>
         <div class="container-fluid login-box">
-            <form class="login-form" method="post" action="/login">
+            <form class="login-form" method="post" action="/register">
                 <input class="login-text-box" type="text" placeholder="username" autofocus name="username"><br>
                 <br>
                 <input class="login-text-box" type="password" placeholder="password" name="password"><br><br>
-                <button class="btn btn-primary" type="submit">LOGIN</button>
+                <input class="login-text-box" type="password" placeholder="confirm password" name="confirmation"><br><br>
+                <button class="btn btn-primary" type="submit">REGISTER</button>
             </form>
             {% if errormsg %}
                 <div class="container-sm bg-danger login-error">
                     <p>{{ errormsg }}</p>
                 </div>
             {% endif %}
-            <div class="no-account">
-                <p>No account? <a href="{{url_for('register')}}">Register</a> today to see how Tracker can help improve your life
-                    by tracking your goals.</p>
-            </div>
         </div>
 {% endblock %}
