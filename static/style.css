@@ -1,0 +1,25 @@
+.login-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+}
+
+.no-account {
+    border-radius: 16px;
+    padding: 8px;
+    margin: 8px;
+    width: 400px;
+}
+
+.no-account p {
+    font-size: 20px;
+}
+
+.login-greeting {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-family: Georgia, serif;
+}

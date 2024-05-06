@@ -5,18 +5,22 @@
 {% endblock %}
 
 {% block body %}
-        <div class="login-box">
+        <div class="container-fluid login-greeting">
+            <h1>Tracker</h1>
+            <p>The easy way to track your goals</p>
+        </div>
+        <div class="container-fluid login-box">
             <form method="post" action="/login">
                 <label for="username">Username</label><br>
                 <input type="text" autofocus name="username"><br>
                 <label for="password">Password</label><br>
-                <input type="text" name="password"><br><br>
-                <button type="submit">Log In</button>
+                <input type="password" name="password"><br><br>
+                <button class="btn btn-primary" type="submit">Log In</button>
             </form>
-            <div class="no-account">
+            <div class="bg-info no-account">
                 <p>No account? Register today to see how Tracker can help improve your life
                     by tracking your goals.</p>
-                <button type="button">Register</button>
+                <button class="btn btn-primary" type="button">Register</button>
             </div>
         </div>
 {% endblock %}
