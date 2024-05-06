@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block header %}
+    <h1>{% block title %}Login{% endblock %}</h1>
+{% endblock %}
+
+{% block body %}
+        <div class="login-box">
+            <form method="post" action="/login">
+                <label for="username">Username</label><br>
+                <input type="text" autofocus name="username"><br>
+                <label for="password">Password</label><br>
+                <input type="text" name="password"><br><br>
+                <button type="submit">Log In</button>
+            </form>
+            <div class="no-account">
+                <p>No account? Register today to see how Tracker can help improve your life
+                    by tracking your goals.</p>
+                <button type="button">Register</button>
+            </div>
+        </div>
+{% endblock %}
