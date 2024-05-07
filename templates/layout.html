@@ -21,7 +21,11 @@
                 <a class="nav-item nav-link active" href="#">Home</a>
                 <a class="nav-item nav-link" href="#">Log Entry</a>
                 <a class="nav-item nav-link" href="#">Track</a>
+                {% if  "user" in session %}
+                <a class="nav-item nav-link" href="/logout">Logout</a>
+                {% else %}
                 <a class="nav-item nav-link" href="/login">Login</a>
+                {% endif %}
               </div>
             </div>
           </nav>
