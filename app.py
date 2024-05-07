@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
 from flask_bcrypt import Bcrypt
+from functools import wraps
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -11,13 +12,19 @@ def retrieveKey():
 
 app.secret_key = retrieveKey()
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @app.route("/")
+@login_required
 def index():
-    if "user" in session:
-        user = session["user"]
-    else:
-        return redirect("/login")
-    return render_template("index.html", user=user)
+    return render_template("index.html", user=session["user"])
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -56,7 +63,7 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if "user" in session:
+    if "user_id" in session:
         return redirect("/")
     if request.method == "POST":
         #Get username from form and check against database
@@ -64,18 +71,20 @@ def login():
         cur = con.cursor()
         username = request.form.get("username").lower()
         res = cur.execute("SELECT * FROM users WHERE username = ?", (username,))
-        username_res = res.fetchall()
+        username_res = res.fetchone()
         con.close()
         #If username is not in database, send error telling user to register.
         if not username_res:
             errormsg = "Username could not be found. Please register if you do not have an account."
             return render_template("login.html", errormsg=errormsg)
         #user_hash is assigned to the row selected, 2nd index is hash.
-        user_hash = username_res[0][2]
+        user_hash = username_res[2]
+        user_id = username_res[0]
         password_plaintext = request.form.get("password")
         is_password_valid = bcrypt.check_password_hash(user_hash, password_plaintext)
         if is_password_valid:
             session["user"] = username
+            session["user_id"] = user_id
             return redirect("/")
         else:
             errormsg = "Password is incorrect. Please try again."
@@ -86,4 +95,5 @@ def login():
 @app.route("/logout")
 def logout():
     session.pop("user", None)
+    session.pop("user_id")
     return redirect("/login")
