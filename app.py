@@ -29,7 +29,11 @@ def index():
 @app.route("/weight", methods=["GET", "POST"])
 @login_required
 def weight():
-    return render_template("weight.html")
+    if request.method == "POST":
+
+        return redirect("/weight")
+    else:
+        return render_template("weight.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

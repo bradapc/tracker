@@ -5,5 +5,22 @@
 {% endblock %}
 
 {% block body %}
-
+    <h1>Weight</h1>
+    <p>It looks like this is your first time tracking weight on Tracker. To start,
+        please enter the information below. Don't worry, you can change it at any time.
+    </p>
+    <form action="/weight" method="post">
+        <input type="text" placeholder="current weight" name="current weight">
+        <input type="text" placeholder="goal weight" name="goal weight">
+        <span class="goal-direction">lose</span>
+        <select name="goal step">
+            <option value="0.5">0.5</option>
+            <option value="1.0">1.0</option>
+            <option value="1.5">1.5</option>
+            <option value="2.0">2.0</option>
+        </select>
+        <span>lbs/week</span>
+        <button type="submit" class="btn btn-primary">Set Goal</button>
+    </form>
+<script src="{{ url_for('static', filename='weight.js') }}"></script>
 {% endblock %}
