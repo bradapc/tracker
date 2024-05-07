@@ -5,15 +5,18 @@ from flask_bcrypt import Bcrypt
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
+def getUsername():
+    pass
+
 @app.route("/")
 def index():
-    return "You're in!"
+    return render_template("index.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         #Retrieve username, password, and confirmation and handle non-input errors
-        form_username = request.form.get("username")
+        form_username = request.form.get("username").lower()
         form_password = request.form.get("password")
         form_confirmation = request.form.get("confirmation")
         if not form_username:
@@ -50,7 +53,7 @@ def login():
         #Get username from form and check against database
         con = sqlite3.connect("tracker.db")
         cur = con.cursor()
-        username = request.form.get("username")
+        username = request.form.get("username").lower()
         res = cur.execute("SELECT * FROM users WHERE username = ?", (username,))
         username_res = res.fetchall()
         con.close()
