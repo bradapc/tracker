@@ -52,3 +52,24 @@ input:focus {
     gap: 6px;
 }
 
+.log-options-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.home-log-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 250px;
+}
+
+.btn.btn-primary.arrow-button {
+    font-size: 36px;
+    width: 80px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
