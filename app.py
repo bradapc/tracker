@@ -1,16 +1,23 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 import sqlite3
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
-def getUsername():
-    pass
+def retrieveKey():
+    with open("secret_key.txt") as key:
+        return key.read()
+
+app.secret_key = retrieveKey()
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    if "user" in session:
+        user = session["user"]
+    else:
+        return redirect("/login")
+    return render_template("index.html", user=user)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -49,6 +56,8 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if "user" in session:
+        return redirect("/")
     if request.method == "POST":
         #Get username from form and check against database
         con = sqlite3.connect("tracker.db")
@@ -66,9 +75,15 @@ def login():
         password_plaintext = request.form.get("password")
         is_password_valid = bcrypt.check_password_hash(user_hash, password_plaintext)
         if is_password_valid:
+            session["user"] = username
             return redirect("/")
         else:
             errormsg = "Password is incorrect. Please try again."
             return render_template("login.html", errormsg=errormsg)
     else:
         return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect("/login")
