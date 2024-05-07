@@ -26,6 +26,11 @@ def login_required(f):
 def index():
     return render_template("index.html", user=session["user"])
 
+@app.route("/weight", methods=["GET", "POST"])
+@login_required
+def weight():
+    return render_template("weight.html")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":

@@ -12,17 +12,23 @@
         <div class="home-log-option">
             <h2>Exercise</h2>
             <p>Track your exercise to see if you're on track to hitting your goals</p>
-            <button type="button" class="btn btn-primary arrow-button">&#8594;</button>
+            <form action="/exercise" method="post">
+                <button type="submit" class="btn btn-primary arrow-button">&#8594;</button>
+            </form>
         </div>
         <div class="home-log-option">
             <h2>Weight</h2>
             <p>Track your weight over time to find out trends in your progress</p>
-            <button type="button" class="btn btn-primary arrow-button">&#8594;</button>
+            <form action="/weight" method="post">
+                <button type="submit" class="btn btn-primary arrow-button">&#8594;</button>
+            </form>
         </div>
         <div class="home-log-option">
             <h2>Free Entry</h2>
             <p>Log about anything that comes to mind</p>
-            <button type="button" class="btn btn-primary arrow-button">&#8594;</button>
+            <form action="/diary" method="post">
+                <button type="submit" class="btn btn-primary arrow-button">&#8594;</button>
+            </form>
         </div>
     </div>
 {% endblock %}
