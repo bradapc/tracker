@@ -6,21 +6,41 @@
 
 {% block body %}
     <h1>Weight</h1>
-    <p>It looks like this is your first time tracking weight on Tracker. To start,
-        please enter the information below. Don't worry, you can change it at any time.
-    </p>
-    <form action="/weight" method="post">
-        <input type="text" placeholder="current weight" name="current weight">
-        <input type="text" placeholder="goal weight" name="goal weight">
-        <span class="goal-direction">lose</span>
-        <select name="goal step">
-            <option value="0.5">0.5</option>
-            <option value="1.0">1.0</option>
-            <option value="1.5">1.5</option>
-            <option value="2.0">2.0</option>
-        </select>
-        <span>lbs/week</span>
-        <button type="submit" class="btn btn-primary">Set Goal</button>
-    </form>
+    <div class="goal-form">
+        <p>It looks like this is your first time tracking weight on Tracker. To start,
+            please enter the information below. Don't worry, you can change it at any time.
+        </p>
+        <form action="/weight" method="post">
+            <div class="goal-form-wrapper">
+                <div class="unit-swap-wrapper">
+                    <span>Units</span>
+                    <input onclick="checkUnitSwap()" type="radio" name="units" value="metric" id="metric">
+                    <label for="metric">metric</label>
+                    <input onclick="checkUnitSwap()" type="radio" name="units" value="imperial" id="imperial" checked>
+                    <label for="imperial">imperial</label>
+                </div>
+                <div class="weight-goal-wrapper">
+                    <input type="text" placeholder="current weight (lb)" name="current weight">
+                    <input type="text" placeholder="goal weight (lb)" name="goal weight">
+                    <span class="goal-direction">lose</span>
+                    <select name="goal step">
+                        <option value="0.5">0.5</option>
+                        <option value="1.0">1.0</option>
+                        <option value="1.5">1.5</option>
+                        <option value="2.0">2.0</option>
+                    </select>
+                    <span class="goal-step-text">lb/week</span>
+                </div>
+                <div class="height-goal-wrapper" id="imperial-height-div">
+                    <input class="height-goal-box" type="text" placeholder="feet" name="feet">
+                    <input class="height-goal-box" type="text" placeholder="inches" name="inches">
+                </div>
+                <div class="height-goal-wrapper" id="metric-height-div">
+                    <input class="height-goal-box" type="text" placeholder="cm" name="cm">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Set Goal</button>
+        </form>
+    </div>
 <script src="{{ url_for('static', filename='weight.js') }}"></script>
 {% endblock %}

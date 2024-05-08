@@ -30,9 +30,22 @@ def index():
 @login_required
 def weight():
     if request.method == "POST":
-
+        #Get goal weight information from the form and store in db.
+        current_weight = request.form.get("current weight")
+        goal_weight = request.form.get("goal weight")
+        goal_step = request.form.get("goal step")
+        goal_direction = 0
+        if current_weight > goal_weight:
+            goal_direction = -1
+        elif current_weight < goal_weight:
+            goal_direction = 1
+        else:
+            goal_direction = 0
+        # TO-DO: Calculate BMI
+        bmi = 0
         return redirect("/weight")
     else:
+        #TO-DO: Query database on GET request and if no goals set, force user to set goal.
         return render_template("weight.html")
 
 @app.route("/register", methods=["GET", "POST"])
