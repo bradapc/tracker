@@ -31,8 +31,8 @@ def index():
 def weight():
     if request.method == "POST":
         #Get goal weight information from the form and store in db.
-        current_weight = request.form.get("current weight")
-        goal_weight = request.form.get("goal weight")
+        current_weight = float(request.form.get("current weight"))
+        goal_weight = float(request.form.get("goal weight"))
         goal_step = request.form.get("goal step")
         goal_direction = 0
         if current_weight > goal_weight:
@@ -41,8 +41,15 @@ def weight():
             goal_direction = 1
         else:
             goal_direction = 0
-        # TO-DO: Calculate BMI
+        # Calculate BMI TODO: add error handling to float conversions, finish imperial
+        selected_unit = request.form['units']
         bmi = 0
+        if selected_unit == "imperial":
+            pass
+        elif selected_unit == "metric":
+            height = float(request.form.get("cm"))
+            bmi = current_weight / (height**2 / 100)
+            print(bmi)
         return redirect("/weight")
     else:
         #TO-DO: Query database on GET request and if no goals set, force user to set goal.
