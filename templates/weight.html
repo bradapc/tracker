@@ -49,19 +49,5 @@
             </form>
         </div>
     {% endif %}
-    {% if weight_goals %}
-        <div class="goal-weight-container">
-            <span>Goal Weight: {{ weight_goals.goal_weight }}</span>
-            {% if (weight_goals.goal_direction > 0) %}
-                <span>gain</span>
-            {% elif (weight_goals.goal_direction < 0) %}
-                <span>lose</span>
-            {% endif %}
-            <span>{{ weight_goals.goal_step }} kg per week</span>
-        </div>
-        <div class="goal-weight-log-entry">
-            
-        </div>
-    {% endif %}
 <script src="{{ url_for('static', filename='weight.js') }}"></script>
 {% endblock %}

@@ -48,6 +48,8 @@ def index():
 @app.route("/weight", methods=["GET", "POST"])
 @login_required
 def weight():
+    if weightGoalExists():
+        return redirect("/weight/log")
     if request.method == "POST":
         #Get goal weight information from the form.
         current_weight = request.form.get("current weight")
@@ -120,10 +122,15 @@ def weight():
             con.commit()
         cur.close()
         con.close()
-        return redirect("/weight")
+        return redirect("/weight/log")
     else:
-        weight_goals = weightGoalExists()
-        return render_template("weight.html", user=session['user'], weight_goals=weight_goals)
+        return render_template("weight.html")
+    
+@app.route("/weight/log", methods=["GET", "POST"])
+@login_required
+def weight_log():
+    weight_goals = weightGoalExists()
+    return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

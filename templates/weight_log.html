@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block header %}
+    <h1>{% block title %}Weight{% endblock %}</h1>
+{% endblock %}
+
+{% block body %}
+    <h1>Weight Goals for {{ user }} </h1>
+    {% if weight_goals %}
+        <div class="goal-weight-container">
+            <span>Goal Weight: {{ weight_goals.goal_weight }}</span>
+            {% if (weight_goals.goal_direction > 0) %}
+                <span>gain</span>
+            {% elif (weight_goals.goal_direction < 0) %}
+                <span>lose</span>
+            {% endif %}
+            <span>{{ weight_goals.goal_step }} kg per week</span>
+        </div>
+        <div class="goal-weight-log-entry">
+            <span>Log Weight</span>
+            <form action="/weight" method="post">
+                <input type="text" placeholder="weight" name="weight-entry">
+                <button type="submit" class="btn btn-primary">Log</button>
+            </form>
+        </div>
+    {% endif %}
+<script src="{{ url_for('static', filename='weight.js') }}"></script>
+{% endblock %}
