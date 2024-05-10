@@ -34,6 +34,7 @@ def convertMetricHeightToImperial(height):
 
 def weightGoalExists():
     con = sqlite3.connect("tracker.db")
+    con.row_factory = sqlite3.Row
     cur = con.cursor()
     res = cur.execute("SELECT * FROM weight_goals WHERE user_id = ?", (session['user_id'],))
     return res.fetchone()
@@ -121,8 +122,8 @@ def weight():
         con.close()
         return redirect("/weight")
     else:
-        #TO-DO: Query database on GET request and if no goals set, force user to set goal.
-        return render_template("weight.html")
+        weight_goals = weightGoalExists()
+        return render_template("weight.html", user=session['user'], weight_goals=weight_goals)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
