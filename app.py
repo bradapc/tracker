@@ -20,6 +20,24 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def convertImperialWeightToMetric(weight):
+    return 0.45359237 * weight
+
+def convertMetricWeightToImperial(weight):
+    return 2.204623 * weight
+
+def convertImperialHeightToMetric(height):
+    return 2.54 * height
+
+def convertMetricHeightToImperial(height):
+    return height / 2.54
+
+def weightGoalExists():
+    con = sqlite3.connect("tracker.db")
+    cur = con.cursor()
+    res = cur.execute("SELECT * FROM weight_goals WHERE user_id = ?", (session['user_id'],))
+    return res.fetchone()
+
 
 @app.route("/")
 @login_required
@@ -73,6 +91,11 @@ def weight():
                     errormsg = "Please enter a number in the height fields to set a goal."
                     return render_template("weight.html", errormsg=errormsg)
             bmi = 703 * (current_weight / height**2)
+            #Convert height and weight units to imperial for storage in database.
+            height = convertImperialHeightToMetric(height)
+            current_weight = convertImperialWeightToMetric(current_weight)
+            goal_weight = convertImperialWeightToMetric(goal_weight)
+
         elif selected_unit == "metric":
             height = request.form.get("cm")
             if not height:
@@ -84,6 +107,18 @@ def weight():
                 errormsg = "Please enter a number in the height field to set a goal."
                 return render_template("weight.html", errormsg=errormsg)
             bmi = current_weight / (height / 100)**2
+        
+        #Enter data in database weight_goals table if no weight goal exists
+        con = sqlite3.connect("tracker.db")
+        cur = con.cursor()
+        if weightGoalExists():
+            cur.execute("UPDATE weight_goals SET goal_weight = ?, goal_step = ?, height = ?, goal_direction = ? WHERE user_id = ?", (goal_weight, goal_step, height, goal_direction, session['user_id']),)
+            con.commit()
+        else:
+            cur.execute("INSERT INTO weight_goals (user_id, goal_weight, goal_step, height, goal_direction) VALUES(?, ?, ?, ?, ?)", (session['user_id'], goal_weight, goal_step, height, goal_direction,))
+            con.commit()
+        cur.close()
+        con.close()
         return redirect("/weight")
     else:
         #TO-DO: Query database on GET request and if no goals set, force user to set goal.
