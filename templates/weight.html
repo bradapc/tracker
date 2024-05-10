@@ -10,6 +10,11 @@
         <p>It looks like this is your first time tracking weight on Tracker. To start,
             please enter the information below. Don't worry, you can change it at any time.
         </p>
+        {% if errormsg %}
+            <div class="container-sm bg-danger error-msg">
+                <p>{{ errormsg }}</p>
+            </div>
+        {% endif %}
         <form action="/weight" method="post">
             <div class="goal-form-wrapper">
                 <div class="unit-swap-wrapper">

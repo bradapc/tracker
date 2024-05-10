@@ -38,7 +38,7 @@ input:focus {
     font-family: Georgia, serif;
 }
 
-.login-error {
+.error-msg {
     border-radius: 16px;
     font-size: 18px;
     font-weight: bold;

@@ -30,26 +30,60 @@ def index():
 @login_required
 def weight():
     if request.method == "POST":
-        #Get goal weight information from the form and store in db.
-        current_weight = float(request.form.get("current weight"))
-        goal_weight = float(request.form.get("goal weight"))
+        #Get goal weight information from the form.
+        current_weight = request.form.get("current weight")
+        goal_weight = request.form.get("goal weight")
         goal_step = request.form.get("goal step")
         goal_direction = 0
+        #Error handle incorrectly filled out fields.
+        if not current_weight or not goal_weight:
+            errormsg = "Please fill out all form fields to set a goal."
+            return render_template("weight.html", errormsg=errormsg)
+        else:
+            try:
+                current_weight = float(current_weight)
+                goal_weight = float(goal_weight)
+            except:
+                errormsg = "Please enter a number in the weight fields to set a goal."
+                return render_template("weight.html", errormsg=errormsg)
+        #Specify goal direction based on weight difference (lose vs gain vs maintain).
         if current_weight > goal_weight:
             goal_direction = -1
         elif current_weight < goal_weight:
             goal_direction = 1
         else:
             goal_direction = 0
-        # Calculate BMI TODO: add error handling to float conversions, finish imperial
+
+        # Calculate BMI
         selected_unit = request.form['units']
         bmi = 0
+
         if selected_unit == "imperial":
-            pass
+            height_in_feet = request.form.get("feet")
+            height_in_inches = request.form.get("inches")
+            height = 0
+            #Error handle incorrect entries into height fields.
+            if not height_in_feet or not height_in_inches:
+                errormsg = "Please fill out all form fields to set a goal."
+                return render_template("weight.html", errormsg=errormsg)
+            else:
+                try:
+                    height = (float(height_in_feet) * 12) + float(height_in_inches)
+                except:
+                    errormsg = "Please enter a number in the height fields to set a goal."
+                    return render_template("weight.html", errormsg=errormsg)
+            bmi = 703 * (current_weight / height**2)
         elif selected_unit == "metric":
-            height = float(request.form.get("cm"))
-            bmi = current_weight / (height**2 / 100)
-            print(bmi)
+            height = request.form.get("cm")
+            if not height:
+                errormsg = "Please fill out all form fields to set a goal."
+                return render_template("weight.html", errormsg=errormsg)
+            try:
+                height = float(height)
+            except:
+                errormsg = "Please enter a number in the height field to set a goal."
+                return render_template("weight.html", errormsg=errormsg)
+            bmi = current_weight / (height / 100)**2
         return redirect("/weight")
     else:
         #TO-DO: Query database on GET request and if no goals set, force user to set goal.
