@@ -86,6 +86,23 @@ def splitDateTime(weight_log):
         new_weight_log.append(new_entry)
     return new_weight_log
 
+def computeBMI(height, weight, units):
+    bmi = 0
+    if units == 'imperial':
+        bmi = 703 * (weight / height**2)
+    elif units == 'metric':
+        bmi = weight / (height / 100)**2
+    return bmi
+
+def addBMI(log, height, units):
+    weight_log = []
+    for row in log:
+        bmi = computeBMI(height, row[1], units)
+        bmi_str = "%0.1f" % bmi
+        row.append(bmi_str)
+        weight_log.append(row)
+    return weight_log
+
 
 @app.route("/")
 @login_required
@@ -124,7 +141,6 @@ def weight():
 
         # Calculate BMI
         selected_unit = request.form['units']
-        bmi = 0
 
         if selected_unit == "imperial":
             height_in_feet = request.form.get("feet")
@@ -140,7 +156,6 @@ def weight():
                 except:
                     errormsg = "Please enter a number in the height fields to set a goal."
                     return render_template("weight.html", errormsg=errormsg)
-            bmi = 703 * (current_weight / height**2)
 
         elif selected_unit == "metric":
             height = request.form.get("cm")
@@ -152,7 +167,6 @@ def weight():
             except:
                 errormsg = "Please enter a number in the height field to set a goal."
                 return render_template("weight.html", errormsg=errormsg)
-            bmi = current_weight / (height / 100)**2
         
         #Get current date and time for insertion into database
         dt_string = getFormattedDateTime()
@@ -183,7 +197,7 @@ def weight_log():
     weight_log = getWeightLog()
     units = getUnits(weight_goals)
     new_weight_log = splitDateTime(weight_log)
-    #TODO: Allow addition of weights
+    new_weight_log = addBMI(new_weight_log, weight_goals['height'], weight_goals['units'])
     #TODO: Graphs / data
     #TODO: Lowest weight, bmi, etc.
     if request.method == "POST":

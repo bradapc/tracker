@@ -28,16 +28,21 @@
                 <button type="submit" class="btn btn-primary">Log</button>
             </form>
         </div>
+        <div class="weight-stats">
+
+        </div>
         <div class="weight-log">
             <table class="table table-info table-striped table-hover">
                 <tr>
                     <th>Weight ({{ units.weight_unit }})</th>
+                    <th>BMI</th>
                     <th>Date</th>
                     <th>Time</th>
                 </tr>
                 {% for entry in new_weight_log %}
                 <tr>
                     <td>{{ entry[1] }}</td>
+                    <td>{{ entry[4] }}</td>
                     <td> {{ entry[2] }}</td>
                     <td>{{ entry[3] }}</td>
                 </tr>
