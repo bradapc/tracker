@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session
 import sqlite3
 from flask_bcrypt import Bcrypt
 from functools import wraps
+from datetime import datetime
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -48,6 +49,11 @@ def weightGoalExists():
     cur = con.cursor()
     res = cur.execute("SELECT * FROM weight_goals WHERE user_id = ?", (session['user_id'],))
     return res.fetchone()
+
+def getFormattedDateTime():
+    current_time = datetime.now()
+    dt_string = current_time.strftime("%d/%m/%Y %H:%M:%S")
+    return dt_string
 
 
 @app.route("/")
@@ -117,14 +123,17 @@ def weight():
                 return render_template("weight.html", errormsg=errormsg)
             bmi = current_weight / (height / 100)**2
         
+        #Get current date and time for insertion into database
+        dt_string = getFormattedDateTime()
+
         #Enter data in database weight_goals table if no weight goal exists
         con = sqlite3.connect("tracker.db")
         cur = con.cursor()
         if weightGoalExists():
-            cur.execute("UPDATE weight_goals SET goal_weight = ?, goal_step = ?, height = ?, goal_direction = ?, units = ? WHERE user_id = ?", (goal_weight, goal_step, height, goal_direction, selected_unit, session['user_id']),)
+            cur.execute("UPDATE weight_goals SET goal_weight = ?, goal_step = ?, height = ?, goal_direction = ?, units = ?, time = ? WHERE user_id = ?", (goal_weight, goal_step, height, goal_direction, selected_unit, dt_string, session['user_id']),)
             con.commit()
         else:
-            cur.execute("INSERT INTO weight_goals (user_id, goal_weight, goal_step, height, goal_direction, units) VALUES(?, ?, ?, ?, ?, ?)", (session['user_id'], goal_weight, goal_step, height, goal_direction, selected_unit,))
+            cur.execute("INSERT INTO weight_goals (user_id, goal_weight, goal_step, height, goal_direction, units, time) VALUES(?, ?, ?, ?, ?, ?, ?)", (session['user_id'], goal_weight, goal_step, height, goal_direction, selected_unit, dt_string,))
             con.commit()
         cur.close()
         con.close()
@@ -137,7 +146,6 @@ def weight():
 def weight_log():
     weight_goals = weightGoalExists()
     units = getUnits(weight_goals)
-    #TODO: Add from weight goal setting the current weight entry with datetime.
     #TODO: List all past weight goals by datetime (need new table).
     #TODO: Graphs / data
     #TODO: Lowest weight, bmi, etc.
