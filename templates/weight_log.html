@@ -8,13 +8,13 @@
     <h1>Weight Goals for {{ user }} </h1>
     {% if weight_goals %}
         <div class="goal-weight-container">
-            <span>Goal Weight: {{ weight_goals.goal_weight }}</span>
+            <span>Goal Weight: {{ weight_goals.goal_weight }} {{ units.weight_unit }}</span>
             {% if (weight_goals.goal_direction > 0) %}
                 <span>gain</span>
             {% elif (weight_goals.goal_direction < 0) %}
                 <span>lose</span>
             {% endif %}
-            <span>{{ weight_goals.goal_step }} kg per week</span>
+            <span>{{ weight_goals.goal_step }} {{ units.weight_unit }} per week</span>
         </div>
         <div class="goal-weight-log-entry">
             <span>Log Weight</span>

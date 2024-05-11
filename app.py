@@ -32,6 +32,16 @@ def convertImperialHeightToMetric(height):
 def convertMetricHeightToImperial(height):
     return height / 2.54
 
+def getUnits(weight_goals):
+    units = {}
+    if weight_goals['units'] == "metric":
+        units['weight_unit'] = "kg"
+        units['height_unit'] = "cm"
+    elif weight_goals['units'] == "imperial":
+        units['weight_unit'] = "lb"
+        units['height_unit'] = "inches"
+    return units
+
 def weightGoalExists():
     con = sqlite3.connect("tracker.db")
     con.row_factory = sqlite3.Row
@@ -121,11 +131,12 @@ def weight():
         return redirect("/weight/log")
     else:
         return render_template("weight.html")
-    
+
 @app.route("/weight/log", methods=["GET", "POST"])
 @login_required
 def weight_log():
     weight_goals = weightGoalExists()
+    units = getUnits(weight_goals)
     #TODO: Add from weight goal setting the current weight entry with datetime.
     #TODO: List all past weight goals by datetime (need new table).
     #TODO: Graphs / data
@@ -133,7 +144,7 @@ def weight_log():
     if request.method == "POST":
         return redirect("/weight/log")
     else:
-        return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals)
+        return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals, units=units)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
