@@ -69,6 +69,19 @@ def getFormattedDateTime():
     dt_string = current_time.strftime("%d/%m/%Y %H:%M:%S")
     return dt_string
 
+def splitDateTime(weight_log):
+    new_weight_log = []
+    for entry in weight_log:
+        new_entry = []
+        dt_list = entry[2].split()
+        dt_list[1] = dt_list[1][0:5]
+        new_entry.append(entry[0])
+        new_entry.append(entry[1])
+        new_entry.append(dt_list[0])
+        new_entry.append(dt_list[1])
+        new_weight_log.append(new_entry)
+    return new_weight_log
+
 
 @app.route("/")
 @login_required
@@ -166,13 +179,14 @@ def weight_log():
     weight_log = getWeightLog()
     units = getUnits(weight_goals)
     #TODO: Split up date and time string
+    new_weight_log = splitDateTime(weight_log)
     #TODO: Allow addition of weights
     #TODO: Graphs / data
     #TODO: Lowest weight, bmi, etc.
     if request.method == "POST":
         return redirect("/weight/log")
     else:
-        return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log)
+        return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals, units=units, new_weight_log=new_weight_log)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
