@@ -61,7 +61,7 @@ def getWeightLog():
     con = sqlite3.connect("tracker.db")
     cur = con.cursor()
     con.row_factory = sqlite3.Row
-    cur.execute("SELECT * FROM weight_log WHERE user_id = ?", (session['user_id'],))
+    cur.execute("SELECT * FROM weight_log WHERE user_id = ? ORDER BY time DESC", (session['user_id'],))
     weight_log = []
     weight_log = cur.fetchall()
     cur.close()
