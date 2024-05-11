@@ -94,10 +94,6 @@ def weight():
                     errormsg = "Please enter a number in the height fields to set a goal."
                     return render_template("weight.html", errormsg=errormsg)
             bmi = 703 * (current_weight / height**2)
-            #Convert height and weight units to imperial for storage in database.
-            height = convertImperialHeightToMetric(height)
-            current_weight = convertImperialWeightToMetric(current_weight)
-            goal_weight = convertImperialWeightToMetric(goal_weight)
 
         elif selected_unit == "metric":
             height = request.form.get("cm")
@@ -115,10 +111,10 @@ def weight():
         con = sqlite3.connect("tracker.db")
         cur = con.cursor()
         if weightGoalExists():
-            cur.execute("UPDATE weight_goals SET goal_weight = ?, goal_step = ?, height = ?, goal_direction = ? WHERE user_id = ?", (goal_weight, goal_step, height, goal_direction, session['user_id']),)
+            cur.execute("UPDATE weight_goals SET goal_weight = ?, goal_step = ?, height = ?, goal_direction = ?, units = ? WHERE user_id = ?", (goal_weight, goal_step, height, goal_direction, selected_unit, session['user_id']),)
             con.commit()
         else:
-            cur.execute("INSERT INTO weight_goals (user_id, goal_weight, goal_step, height, goal_direction) VALUES(?, ?, ?, ?, ?)", (session['user_id'], goal_weight, goal_step, height, goal_direction,))
+            cur.execute("INSERT INTO weight_goals (user_id, goal_weight, goal_step, height, goal_direction, units) VALUES(?, ?, ?, ?, ?, ?)", (session['user_id'], goal_weight, goal_step, height, goal_direction, selected_unit,))
             con.commit()
         cur.close()
         con.close()
@@ -130,7 +126,14 @@ def weight():
 @login_required
 def weight_log():
     weight_goals = weightGoalExists()
-    return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals)
+    #TODO: Add from weight goal setting the current weight entry with datetime.
+    #TODO: List all past weight goals by datetime (need new table).
+    #TODO: Graphs / data
+    #TODO: Lowest weight, bmi, etc.
+    if request.method == "POST":
+        return redirect("/weight/log")
+    else:
+        return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
