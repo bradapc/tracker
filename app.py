@@ -4,6 +4,10 @@ from flask_bcrypt import Bcrypt
 from functools import wraps
 from datetime import datetime
 
+#TODO: Use JS for visual feedback on form validation, not flask.
+#Use flask for validation but only to redirect because app.py becomes bloated otherwise with
+#errormsgs.
+
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
@@ -178,12 +182,26 @@ def weight_log():
         return redirect("/weight")
     weight_log = getWeightLog()
     units = getUnits(weight_goals)
-    #TODO: Split up date and time string
     new_weight_log = splitDateTime(weight_log)
     #TODO: Allow addition of weights
     #TODO: Graphs / data
     #TODO: Lowest weight, bmi, etc.
     if request.method == "POST":
+        new_weight_entry = request.form.get("weight-entry")
+        if not new_weight_entry:
+            errormsg = "Please enter a weight."
+            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, new_weight_log=new_weight_log)
+        try:
+            new_weight_entry = float(new_weight_entry)
+        except:
+            errormsg = "Please enter only numbers into the weight form."
+            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, new_weight_log=new_weight_log)
+        dt_string = getFormattedDateTime()
+        #Insert entry into database
+        con = sqlite3.connect("tracker.db")
+        cur = con.cursor()
+        cur.execute("INSERT INTO weight_log (user_id, weight, time) VALUES(?, ?, ?)", (session['user_id'], new_weight_entry, dt_string,))
+        con.commit()
         return redirect("/weight/log")
     else:
         return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals, units=units, new_weight_log=new_weight_log)

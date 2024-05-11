@@ -16,17 +16,23 @@
             {% endif %}
             <span>{{ weight_goals.goal_step }} {{ units.weight_unit }} per week</span>
         </div>
+        {% if errormsg %}
+            <div class="container-sm bg-danger error-msg">
+                <p>{{ errormsg }}</p>
+            </div>
+        {% endif %}
         <div class="goal-weight-log-entry">
             <span>Log Weight</span>
-            <form action="/weight" method="post">
+            <form action="/weight/log" method="post">
                 <input type="text" placeholder="weight" name="weight-entry">
                 <button type="submit" class="btn btn-primary">Log</button>
             </form>
         </div>
         <div class="weight-log">
-            <table>
+            <table class="table table-info table-striped table-hover">
                 <tr>
                     <th>Weight ({{ units.weight_unit }})</th>
+                    <th>Date</th>
                     <th>Time</th>
                 </tr>
                 {% for entry in new_weight_log %}

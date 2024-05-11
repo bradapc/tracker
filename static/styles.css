@@ -94,3 +94,7 @@ input:focus {
     width: 200px;
     padding: 4px;
 }
+
+.weight-log {
+    width: 600px;
+}
