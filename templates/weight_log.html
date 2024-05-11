@@ -50,5 +50,16 @@
             </table>
         </div>
     {% endif %}
-<script src="{{ url_for('static', filename='weight.js') }}"></script>
+    <div class="bmi-info">
+        <span>Your current BMI is <em>{{ new_weight_log[0][4] }}</em>. Your BMI is shown as a red line below
+            relative to the BMI categories. Ideally, your BMI should be within the 18-25 range.
+        </span>
+    </div>
+    <div class="bmi-visualizer">
+    </div>
+<script src="{{ url_for('static', filename='weight_log.js') }}"></script>
+<script type="text/javascript">
+    current_bmi = '{{ new_weight_log[0][4] }}';
+    renderBMIScale(current_bmi);
+</script>
 {% endblock %}
