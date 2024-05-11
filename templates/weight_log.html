@@ -23,6 +23,20 @@
                 <button type="submit" class="btn btn-primary">Log</button>
             </form>
         </div>
+        <div class="weight-log">
+            <table>
+                <tr>
+                    <th>Weight ({{ units.weight_unit }})</th>
+                    <th>Time</th>
+                </tr>
+                {% for entry in weight_log %}
+                <tr>
+                    <td>{{ entry[1] }}</td>
+                    <td> {{ entry[2] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
     {% endif %}
 <script src="{{ url_for('static', filename='weight.js') }}"></script>
 {% endblock %}

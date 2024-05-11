@@ -48,7 +48,21 @@ def weightGoalExists():
     con.row_factory = sqlite3.Row
     cur = con.cursor()
     res = cur.execute("SELECT * FROM weight_goals WHERE user_id = ?", (session['user_id'],))
-    return res.fetchone()
+    res = res.fetchone()
+    cur.close()
+    con.close()
+    return res
+
+def getWeightLog():
+    con = sqlite3.connect("tracker.db")
+    cur = con.cursor()
+    con.row_factory = sqlite3.Row
+    cur.execute("SELECT * FROM weight_log WHERE user_id = ?", (session['user_id'],))
+    weight_log = []
+    weight_log = cur.fetchall()
+    cur.close()
+    con.close()
+    return weight_log
 
 def getFormattedDateTime():
     current_time = datetime.now()
@@ -131,9 +145,11 @@ def weight():
         cur = con.cursor()
         if weightGoalExists():
             cur.execute("UPDATE weight_goals SET goal_weight = ?, goal_step = ?, height = ?, goal_direction = ?, units = ?, time = ? WHERE user_id = ?", (goal_weight, goal_step, height, goal_direction, selected_unit, dt_string, session['user_id']),)
+            #TODO: add log into weight_log for goal updates (goal updates not added yet)
             con.commit()
         else:
             cur.execute("INSERT INTO weight_goals (user_id, goal_weight, goal_step, height, goal_direction, units, time) VALUES(?, ?, ?, ?, ?, ?, ?)", (session['user_id'], goal_weight, goal_step, height, goal_direction, selected_unit, dt_string,))
+            cur.execute("INSERT INTO weight_log (user_id, weight, time) VALUES(?, ?, ?)", (session['user_id'], current_weight, dt_string,))
             con.commit()
         cur.close()
         con.close()
@@ -145,14 +161,18 @@ def weight():
 @login_required
 def weight_log():
     weight_goals = weightGoalExists()
+    if not weight_goals:
+        return redirect("/weight")
+    weight_log = getWeightLog()
     units = getUnits(weight_goals)
-    #TODO: List all past weight goals by datetime (need new table).
+    #TODO: Split up date and time string
+    #TODO: Allow addition of weights
     #TODO: Graphs / data
     #TODO: Lowest weight, bmi, etc.
     if request.method == "POST":
         return redirect("/weight/log")
     else:
-        return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals, units=units)
+        return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
