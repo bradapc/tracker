@@ -128,6 +128,26 @@ input:focus {
 .goal-weight-container {
     display: flex;
     justify-content: center;
+    gap: 8px;
+    margin: 32px 0 32px 0;
+}
+
+.goal-weight-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 3px solid black;
+    border-radius: 8px;
+    padding: 16px;
+    width: 200px;
+    height: 100px;
+    background-color: #cff4fc;
+    color: #0d63fd;
+}
+
+.goal-weight-box-head {
+    font-size: 32px;
+    font-weight: bold;
 }
 
 .goal-weight-log-entry {
