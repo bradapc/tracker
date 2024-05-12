@@ -49,6 +49,7 @@
 
         </div>
         <div class="weight-log-wrapper">
+            <h1 class="goal-weight-box-head">My Log</h1>
             <div class="weight-log">
                 <table class="table table-info table-striped table-hover">
                     <tr>
@@ -56,6 +57,7 @@
                         <th>BMI</th>
                         <th>Date</th>
                         <th>Time</th>
+                        <th></th>
                     </tr>
                     {% for entry in new_weight_log %}
                     <tr>
@@ -63,6 +65,7 @@
                         <td>{{ entry[4] }}</td>
                         <td> {{ entry[2] }}</td>
                         <td>{{ entry[3] }}</td>
+                        <td><span>&#9998;</span><span>&#128465;</span></td>
                     </tr>
                     {% endfor %}
                 </table>

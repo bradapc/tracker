@@ -154,6 +154,7 @@ input:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 32px;
 }
 
 .goal-weight-log-entry span {
@@ -166,5 +167,10 @@ input:focus {
 
 .weight-log-wrapper {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+body {
+    user-select: none;
 }
