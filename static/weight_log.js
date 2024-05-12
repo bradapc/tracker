@@ -1,9 +1,14 @@
 //Creates a visualizer of the BMI scale
 //BMI scale goes from <18 (underweight) to >45 (severely obese)
 //For representation, BMI scale will go as low as 0 and as high as 60
-//For representation, multiply each entry by 20.
+//For representation, multiply each entry by SCALING_FACTOR.
 
 bmi_visualizer = document.querySelector(".bmi-visualizer");
+bmi_category_span = document.getElementById("bmi-category-span");
+
+SCALING_FACTOR = 17;
+
+user_bmi_category = null;
 
 class BMICategory {
     constructor(min, max, name, color) {
@@ -29,10 +34,10 @@ function renderBMIScale(current_bmi){
         width_diff = categories[i].max - categories[i].min;
         const bmiTextDiv = document.createElement("div");
         bmiTextDiv.innerHTML = categories[i].min + "-" + categories[i].max;
-        bmiTextDiv.width = width_diff * 20 + "px";
+        bmiTextDiv.width = width_diff * SCALING_FACTOR + "px";
         bmiTextDiv.style.textAlign = "center";
         const bmiColorDiv = document.createElement("div");
-        bmiColorDiv.style.width = width_diff * 20 + "px";
+        bmiColorDiv.style.width = width_diff * SCALING_FACTOR + "px";
         bmiColorDiv.style.height = 100 + "px";
         bmiColorDiv.style.backgroundColor = categories[i].color;
         bmiColorDiv.innerHTML = categories[i].name;
@@ -43,13 +48,14 @@ function renderBMIScale(current_bmi){
 
         if (current_bmi >= categories[i].min && current_bmi <= categories[i].max)
             {
-                bmi_padding_left = ((current_bmi - categories[i].min) / (categories[i].max - categories[i].min) * width_diff * 20);
+                user_bmi_category = categories[i];
+                bmi_padding_left = ((current_bmi - categories[i].min) / (categories[i].max - categories[i].min) * width_diff * SCALING_FACTOR);
                 console.log(bmi_padding_left);
                 const bmiDivLine = document.createElement("div");
                 bmiDivLine.style.height = 100 + "px";
                 bmiDivLine.style.top = "-24px";
                 bmiDivLine.style.width = 2 + "px";
-                bmiDivLine.style.backgroundColor = "red";
+                bmiDivLine.style.backgroundColor = "black";
                 bmiDivLine.style.zIndex = "1";
                 bmiDivLine.style.position = "relative";
                 bmiDivLine.style.left = bmi_padding_left + "px";
@@ -60,4 +66,10 @@ function renderBMIScale(current_bmi){
         bmiVisualizerWrapper.appendChild(bmiColorWrapper);
         bmi_visualizer.appendChild(bmiVisualizerWrapper);
     }
+    bmi_category_span.innerHTML = "Category: " + getUserBMICategory().name;
+    bmi_category_span.style.color = getUserBMICategory().color;
 };
+
+function getUserBMICategory() {
+    return user_bmi_category;
+}

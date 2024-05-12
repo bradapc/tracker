@@ -99,7 +99,52 @@ input:focus {
     width: 600px;
 }
 
+.bmi-info-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.bmi-info {
+    display: flex;
+    flex-direction: column;
+    width: 1000px;
+    text-align: center;
+}
+
 .bmi-visualizer {
     display: flex;
+    justify-content: center;
     height: 100px;
+}
+
+#bmi-category-span {
+    font-weight: bold;
+}
+
+.page-title-header {
+    text-align: center;
+}
+
+.goal-weight-container {
+    display: flex;
+    justify-content: center;
+}
+
+.goal-weight-log-entry {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.goal-weight-log-entry span {
+    font-size: 22px;
+}
+
+.weight-log table {
+    border: 1px solid black;
+}
+
+.weight-log-wrapper {
+    display: flex;
+    justify-content: center;
 }

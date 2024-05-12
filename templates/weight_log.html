@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Weight Goals for {{ user }} </h1>
+    <h1 class="page-title-header">Weight Goals for {{ user }} </h1>
     {% if weight_goals %}
         <div class="goal-weight-container">
             <span>Goal Weight: {{ weight_goals.goal_weight }} {{ units.weight_unit }}</span>
@@ -24,36 +24,43 @@
         <div class="goal-weight-log-entry">
             <span>Log Weight</span>
             <form action="/weight/log" method="post">
-                <input type="text" placeholder="weight" name="weight-entry">
+                <input type="text" placeholder="your current weight" name="weight-entry">
                 <button type="submit" class="btn btn-primary">Log</button>
             </form>
         </div>
         <div class="weight-stats">
 
         </div>
-        <div class="weight-log">
-            <table class="table table-info table-striped table-hover">
-                <tr>
-                    <th>Weight ({{ units.weight_unit }})</th>
-                    <th>BMI</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                </tr>
-                {% for entry in new_weight_log %}
-                <tr>
-                    <td>{{ entry[1] }}</td>
-                    <td>{{ entry[4] }}</td>
-                    <td> {{ entry[2] }}</td>
-                    <td>{{ entry[3] }}</td>
-                </tr>
-                {% endfor %}
-            </table>
+        <div class="weight-log-wrapper">
+            <div class="weight-log">
+                <table class="table table-info table-striped table-hover">
+                    <tr>
+                        <th>Weight ({{ units.weight_unit }})</th>
+                        <th>BMI</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+                    {% for entry in new_weight_log %}
+                    <tr>
+                        <td>{{ entry[1] }}</td>
+                        <td>{{ entry[4] }}</td>
+                        <td> {{ entry[2] }}</td>
+                        <td>{{ entry[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
     {% endif %}
-    <div class="bmi-info">
-        <span>Your current BMI is <em>{{ new_weight_log[0][4] }}</em>. Your BMI is shown as a red line below
-            relative to the BMI categories. Ideally, your BMI should be within the 18-25 range.
-        </span>
+    <div class="bmi-info-wrapper">
+        <div class="bmi-info">
+            <span id="bmi-category-span"></span>
+            <span>Your current BMI is <em>{{ new_weight_log[0][4] }}</em>. Your BMI is shown as a line below
+                relative to the BMI categories. Ideally, your BMI should be within the 18-25 range.
+                However, BMI does not account for percentage of muscle vs. body fat, so may be inaccurate
+                in some cases.
+            </span>
+        </div>
     </div>
     <div class="bmi-visualizer">
     </div>
