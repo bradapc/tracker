@@ -109,6 +109,12 @@ def addBMI(log, height, units):
 def index():
     return render_template("index.html", user=session["user"])
 
+@app.route("/goals", methods=["GET", "POST"])
+@login_required
+def goals():
+    user_goals = []
+    return render_template("goals.html", user=session['user'], user_goals=user_goals)
+
 @app.route("/weight", methods=["GET", "POST"])
 @login_required
 def weight():

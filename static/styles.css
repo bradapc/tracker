@@ -174,3 +174,25 @@ input:focus {
 body {
     user-select: none;
 }
+
+.new-goal-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.new-goal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.new-goal-form button {
+    width: 120px;
+}
+
+.new-goal-div textarea {
+    resize: none;
+    outline: none;
+  }

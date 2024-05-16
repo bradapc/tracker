@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block header %}
+    <h1>{% block title %}Goals{% endblock %}</h1>
+{% endblock %}
+
+{% block body %}
+    <h1>{{ user }}'s Goals </h1>
+    {% for goal in user_goals %}
+
+    {% endfor %}
+    <div class="new-goal-div">
+        <h4>What do you want to accomplish?</h4>
+        <form class="new-goal-form" action="/goals" method="post">
+            <input type="text" name="goal title" placeholder="goal title">
+            <textarea type="text" name="goal description" placeholder="goal description" maxlength="500" rows="4" cols="50"></textarea>
+            <button type="submit" class="btn btn-primary">Add Goal</button>
+        </form>
+    </div>
+
+{% endblock %}
