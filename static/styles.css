@@ -213,9 +213,7 @@ body {
 
 .goal-desc-div {
     background-color: rgb(146, 201, 247);
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    padding: 4px;
+    padding: 4px 4px 0px;
     word-wrap: break-word;
 }
 
@@ -224,4 +222,16 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 8px;
+}
+
+.goal-options {
+    background-color: rgb(146, 201, 247);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn.btn-primary.delete-goal {
+    font-size: 8px;
 }

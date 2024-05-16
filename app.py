@@ -136,6 +136,19 @@ def goals():
         return redirect("/goals")
     else:
         return render_template("goals.html", user=session['user'], user_goals=user_goals)
+    
+@app.route("/goals/remove", methods=["GET", "POST"])
+@login_required
+def goals_remove():
+    if request.method == "POST":
+        goal_id = request.form['remove_goal']
+        con = sqlite3.connect("tracker.db")
+        cur = con.cursor()
+        cur.execute("DELETE FROM user_goals WHERE goal_id = ?", (goal_id,))
+        con.commit()
+        return redirect("/goals")
+    else:
+        return redirect("/goals")
 
 @app.route("/weight", methods=["GET", "POST"])
 @login_required

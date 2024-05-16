@@ -15,6 +15,11 @@
                 <div class="goal-desc-div">
                     <p>{{ goal[2] }}</p>
                 </div>
+                <div class="goal-options">
+                    <form action="/goals/remove" method="post">
+                        <button type="submit" name="remove_goal" value="{{ goal[0] }}" class="btn btn-primary delete-goal">&#128465</button>
+                    </form>
+                </div>
             </div>
         {% endfor %}
     </div>
