@@ -196,3 +196,32 @@ body {
     resize: none;
     outline: none;
   }
+
+.user-goal-div {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+
+.goal-title-div {
+    background-color: #0d63fd;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 4px;
+    word-wrap: break-word;
+}
+
+.goal-desc-div {
+    background-color: rgb(146, 201, 247);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding: 4px;
+    word-wrap: break-word;
+}
+
+.user-goals {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}

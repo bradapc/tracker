@@ -103,6 +103,14 @@ def addBMI(log, height, units):
         weight_log.append(row)
     return weight_log
 
+def getUserGoals():
+    con = sqlite3.connect("tracker.db")
+    cur = con.cursor()
+    cur.execute("SELECT goal_id, goal_title, goal_desc FROM user_goals WHERE user_id = ?", (session['user_id'],))
+    user_goals = []
+    user_goals = cur.fetchall()
+    return user_goals
+
 
 @app.route("/")
 @login_required
@@ -112,8 +120,22 @@ def index():
 @app.route("/goals", methods=["GET", "POST"])
 @login_required
 def goals():
-    user_goals = []
-    return render_template("goals.html", user=session['user'], user_goals=user_goals)
+    user_goals = getUserGoals()
+    if request.method == "POST":
+        goal_title = request.form.get("goal title")
+        goal_description = request.form.get("goal description")
+        if len(goal_title) > 80 or len(goal_description) > 500:
+            return redirect("/goals")
+        if not goal_title or not goal_description:
+            return redirect("/goals")
+        con = sqlite3.connect("tracker.db")
+        cur = con.cursor()
+        cur.execute("INSERT INTO user_goals (user_id, goal_title, goal_desc) VALUES(?, ?, ?)", (session['user_id'], goal_title, goal_description,))
+        con.commit()
+        con.close()
+        return redirect("/goals")
+    else:
+        return render_template("goals.html", user=session['user'], user_goals=user_goals)
 
 @app.route("/weight", methods=["GET", "POST"])
 @login_required

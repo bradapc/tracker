@@ -6,13 +6,22 @@
 
 {% block body %}
     <h1>{{ user }}'s Goals </h1>
-    {% for goal in user_goals %}
-
-    {% endfor %}
+    <div class="user-goals">
+        {% for goal in user_goals %}
+            <div class="user-goal-div">
+                <div class="goal-title-div">
+                    <h5>{{ goal[1] }}</h5>
+                </div>
+                <div class="goal-desc-div">
+                    <p>{{ goal[2] }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
     <div class="new-goal-div">
         <h4>What do you want to accomplish?</h4>
         <form class="new-goal-form" action="/goals" method="post">
-            <input type="text" name="goal title" placeholder="goal title">
+            <input type="text" name="goal title" placeholder="goal title" maxlength="80">
             <textarea type="text" name="goal description" placeholder="goal description" maxlength="500" rows="4" cols="50"></textarea>
             <button type="submit" class="btn btn-primary">Add Goal</button>
         </form>
