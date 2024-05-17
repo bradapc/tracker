@@ -273,3 +273,18 @@ body h1 {
     background: none;
     border: none;
 }
+
+.edit-weight-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.edit-weight-entry-time-div {
+    display: flex;
+
+}
+
+.edit-weight-input-time {
+    width: 30px;
+}

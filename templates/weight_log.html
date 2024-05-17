@@ -67,19 +67,30 @@
                         <td>{{ entry[4] }}</td>
                         <td class="weight-log-options-td">
                             <!-- Button trigger modal -->
-                            <button type="button" class="weight-log-edit" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            <button type="button" class="weight-log-edit" data-bs-toggle="modal" data-bs-target="#editModal{{ entry[0] }}">
                                 &#9998;
                             </button>
                             <!-- Modal -->
-                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal fade" id="editModal{{ entry[0] }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Entry</h1>
+                                    <h1 class="modal-title fs-5" id="editModalLabel">Edit Entry</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                    ...
+                                        <form class="edit-weight-entry" action="/weight/log/edit" method="post">
+                                            <label for="weight edit">Weight</label>
+                                            <input type="text" name="weight edit" value="{{ entry[2] }}">
+                                            <label for="date edit">Date</label>
+                                            <input type="date" name="date edit" value="{{ entry[3][6:10] }}-{{ entry[3][3:5] }}-{{ entry[3][0:2] }}">
+                                            <div class="eidt-weight-entry-time-div">
+                                                <label for="time hours">Time</label>
+                                                <input class="edit-weight-input-time" type="text" name="time hours" maxlength="2" value="{{ entry[4][0:2] }}">
+                                                <span>:</span>
+                                                <input class="edit-weight-input-time" type="text" name="time minutes" maxlength="2" value="{{ entry[4][3:5] }}">
+                                            </div>
+                                        </form>
                                     </div>
                                     <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
