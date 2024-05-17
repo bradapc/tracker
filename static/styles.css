@@ -55,6 +55,7 @@ input:focus {
 .log-options-wrapper {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 16px;
 }
 
