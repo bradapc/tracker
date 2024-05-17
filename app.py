@@ -77,10 +77,11 @@ def splitDateTime(weight_log):
     new_weight_log = []
     for entry in weight_log:
         new_entry = []
-        dt_list = entry[2].split()
+        dt_list = entry[3].split()
         dt_list[1] = dt_list[1][0:5]
         new_entry.append(entry[0])
         new_entry.append(entry[1])
+        new_entry.append(entry[2])
         new_entry.append(dt_list[0])
         new_entry.append(dt_list[1])
         new_weight_log.append(new_entry)
@@ -97,7 +98,7 @@ def computeBMI(height, weight, units):
 def addBMI(log, height, units):
     weight_log = []
     for row in log:
-        bmi = computeBMI(height, row[1], units)
+        bmi = computeBMI(height, row[2], units)
         bmi_str = "%0.1f" % bmi
         row.append(bmi_str)
         weight_log.append(row)
