@@ -79,22 +79,25 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form class="edit-weight-entry" action="/weight/log/edit" method="post">
+                                        <form id="weight-edit" class="edit-weight-entry" action="/weight/log/edit" method="post">
                                             <label for="weight edit">Weight</label>
-                                            <input type="text" name="weight edit" value="{{ entry[2] }}">
+                                            <div>
+                                                <input type="text" name="weight edit" id="weightinput{{ entry[0] }}" value="{{ entry[2] }}">
+                                                <span>{{ units.weight_unit }}</span>
+                                            </div>
                                             <label for="date edit">Date</label>
-                                            <input type="date" name="date edit" value="{{ entry[3][6:10] }}-{{ entry[3][3:5] }}-{{ entry[3][0:2] }}">
-                                            <div class="eidt-weight-entry-time-div">
+                                            <input type="date" name="date edit" id="dateinput{{ entry[0] }}" value="{{ entry[3][6:10] }}-{{ entry[3][3:5] }}-{{ entry[3][0:2] }}">
+                                            <div class="edit-weight-entry-time-div">
                                                 <label for="time hours">Time</label>
-                                                <input class="edit-weight-input-time" type="text" name="time hours" maxlength="2" value="{{ entry[4][0:2] }}">
+                                                <input class="edit-weight-input-time" id="hoursinput{{ entry[0] }}" type="text" name="time hours" maxlength="2" value="{{ entry[4][0:2] }}">
                                                 <span>:</span>
-                                                <input class="edit-weight-input-time" type="text" name="time minutes" maxlength="2" value="{{ entry[4][3:5] }}">
+                                                <input class="edit-weight-input-time" id="minutesinput{{ entry[0] }}" type="text" name="time minutes" maxlength="2" value="{{ entry[4][3:5] }}">
                                             </div>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save Changes</button>
+                                    <button type="button" onclick="resetValues('{{ entry[0] }}')" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" form="weight-edit" class="btn btn-primary">Save Changes</button>
                                     </div>
                                 </div>
                                 </div>
@@ -124,6 +127,9 @@
 <script src="{{ url_for('static', filename='weight_log.js') }}"></script>
 <script type="text/javascript">
     current_bmi = '{{ new_weight_log[0][5] }}';
+    if ('{{ new_weight_log }}') {
+        weight_entries_json = '{{ new_weight_log | tojson }}';
+    }
     renderBMIScale(current_bmi);
 </script>
 {% endblock %}

@@ -50,7 +50,6 @@ function renderBMIScale(current_bmi){
             {
                 user_bmi_category = categories[i];
                 bmi_padding_left = ((current_bmi - categories[i].min) / (categories[i].max - categories[i].min) * width_diff * SCALING_FACTOR);
-                console.log(bmi_padding_left);
                 const bmiDivLine = document.createElement("div");
                 bmiDivLine.style.height = 100 + "px";
                 bmiDivLine.style.top = "-24px";
@@ -72,4 +71,25 @@ function renderBMIScale(current_bmi){
 
 function getUserBMICategory() {
     return user_bmi_category;
+}
+
+function resetValues(id) {
+    weight_input = document.getElementById("weightinput" + id);
+    date_input = document.getElementById("dateinput" + id);
+    hours_input = document.getElementById("hoursinput" + id);
+    minutes_input = document.getElementById("minutesinput" + id);
+    current_log = null;
+    weight_entries = JSON.parse(weight_entries_json);
+    for (i = 0; i < weight_entries.length; i++) {
+        if(weight_entries[i][0] == id) {
+            current_log = weight_entries[i];
+        }
+    }
+    if (!current_log) {
+        return;
+    }
+    weight_input.value = current_log[2];
+    date_input.value = current_log[3].slice(6, 10) + "-" + current_log[3].slice(3, 5) + "-" + current_log[3].slice(0, 2);
+    hours_input.value = current_log[4].slice(0, 2);
+    minutes_input.value = current_log[4].slice(3, 5);
 }
