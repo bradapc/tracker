@@ -79,7 +79,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form id="weight-edit" class="edit-weight-entry" action="/weight/log/edit" method="post">
+                                        <form id="weight-edit{{ entry[0] }}" class="edit-weight-entry" action="/weight/log/edit" method="post">
                                             <label for="weight edit">Weight</label>
                                             <div>
                                                 <input type="text" name="weight edit" id="weightinput{{ entry[0] }}" value="{{ entry[2] }}">
@@ -89,15 +89,15 @@
                                             <input type="date" name="date edit" id="dateinput{{ entry[0] }}" value="{{ entry[3][6:10] }}-{{ entry[3][3:5] }}-{{ entry[3][0:2] }}">
                                             <div class="edit-weight-entry-time-div">
                                                 <label for="time hours">Time</label>
-                                                <input class="edit-weight-input-time" id="hoursinput{{ entry[0] }}" type="text" name="time hours" maxlength="2" value="{{ entry[4][0:2] }}">
+                                                <input class="edit-weight-input-time" id="hoursinput{{ entry[0] }}" type="text" name="hours edit" maxlength="2" value="{{ entry[4][0:2] }}">
                                                 <span>:</span>
-                                                <input class="edit-weight-input-time" id="minutesinput{{ entry[0] }}" type="text" name="time minutes" maxlength="2" value="{{ entry[4][3:5] }}">
+                                                <input class="edit-weight-input-time" id="minutesinput{{ entry[0] }}" type="text" name="minutes edit" maxlength="2" value="{{ entry[4][3:5] }}">
                                             </div>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
                                     <button type="button" onclick="resetValues('{{ entry[0] }}')" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" form="weight-edit" class="btn btn-primary">Save Changes</button>
+                                    <button type="submit" name="button edit log" value="{{ entry[0] }}" form="weight-edit{{ entry[0] }}" class="btn btn-primary">Save Changes</button>
                                     </div>
                                 </div>
                                 </div>

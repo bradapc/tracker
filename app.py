@@ -3,6 +3,7 @@ import sqlite3
 from flask_bcrypt import Bcrypt
 from functools import wraps
 from datetime import datetime
+import re
 
 #TODO: Use JS for visual feedback on form validation, not flask.
 #Use flask for validation but only to redirect because app.py becomes bloated otherwise with
@@ -269,6 +270,32 @@ def weight_log_delete():
     con = sqlite3.connect("tracker.db")
     cur = con.cursor()
     cur.execute("DELETE FROM weight_log WHERE log_id = ?", (log_id,))
+    con.commit()
+    return redirect("/weight/log")
+
+@app.route("/weight/log/edit", methods=["POST"])
+@login_required
+def weight_log_edit():
+    weight_input = request.form.get("weight edit")
+    date_input = request.form.get("date edit")
+    hours_input = request.form.get("hours edit")
+    minutes_input = request.form.get("minutes edit")
+    if not weight_input or not date_input or not hours_input or not minutes_input:
+        return redirect("/weight/log")
+    if hours_input not in [str(i).zfill(2) for i in range(0, 24)]:
+        return redirect("/weight/log")
+    if minutes_input not in [str(i).zfill(2) for i in range(0, 60)]:
+        return redirect("/weight/log")
+    date = date_input.split("-")
+    if (not (re.search("[0-9][0-9][0-9][0-9]", date[0]) and
+        re.search("0|1[0-9]", date[1]) and
+        re.search("[0-31]", date[2]))):
+        return redirect("/weight/log")
+    dt_string = date[2] + "/" + date[1] + "/" + date[0] + " " + str(hours_input) + ":" + str(minutes_input)
+    id = request.form['button edit log']
+    con = sqlite3.connect("tracker.db")
+    cur = con.cursor()
+    cur.execute("UPDATE weight_log SET weight = ?, time = ? WHERE log_id = ?", (weight_input, dt_string, id,))
     con.commit()
     return redirect("/weight/log")
 
