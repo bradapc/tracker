@@ -237,3 +237,18 @@ body {
 .btn.btn-primary.delete-goal {
     font-size: 8px;
 }
+
+.goal-title-div h5, p {
+    font-family: Georgia, serif;
+    margin-top: 6px;
+    margin-left: 6px;
+}
+
+.goal-title-div h5 {
+    color: white;
+}
+
+body h1 {
+    display: flex;
+    justify-content: center;
+}
