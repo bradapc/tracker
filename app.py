@@ -262,6 +262,16 @@ def weight_log():
     else:
         return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals, units=units, new_weight_log=new_weight_log)
 
+@app.route("/weight/log/delete", methods=["POST"])
+@login_required
+def weight_log_delete():
+    log_id = request.form['delete log']
+    con = sqlite3.connect("tracker.db")
+    cur = con.cursor()
+    cur.execute("DELETE FROM weight_log WHERE log_id = ?", (log_id,))
+    con.commit()
+    return redirect("/weight/log")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
