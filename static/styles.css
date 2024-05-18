@@ -141,8 +141,8 @@ input:focus {
     padding: 16px;
     width: 200px;
     height: 100px;
-    background-color: #cff4fc;
-    color: #0d63fd;
+    background-color: rgb(146, 201, 247);
+    color: white;
     font-family: Georgia, serif;
 }
 
@@ -151,7 +151,7 @@ input:focus {
 }
 
 .goal-weight-box-head {
-    font-size: 32px;
+    font-size: 26px;
     font-weight: bold;
 }
 
