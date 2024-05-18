@@ -10,11 +10,11 @@
         <div class="goal-weight-container">
             <div class="goal-weight-box">
                 <span class="goal-weight-box-head">Current</span>
-                <span>{{ new_weight_log[0][2] }} {{units.weight_unit}}</span>
+                <span class="goal-weight-box-body">{{ new_weight_log[0][2] }} {{units.weight_unit}}</span>
             </div>
             <div class="goal-weight-box">
                 <span class="goal-weight-box-head">Goal</span>
-                <span>{{ weight_goals.goal_weight }} {{ units.weight_unit }}</span>
+                <span class="goal-weight-box-body">{{ weight_goals.goal_weight }} {{ units.weight_unit }}</span>
             </div>
             <div class="goal-weight-box">
                 {% if (weight_goals.goal_direction > 0) %}
@@ -22,15 +22,15 @@
                 {% elif (weight_goals.goal_direction < 0) %}
                     <span class="goal-weight-box-head">Lose</span>
                 {% endif %}
-                <span>{{ weight_goals.goal_step }} {{ units.weight_unit }} per week</span>
+                <span class="goal-weight-box-body">{{ weight_goals.goal_step }} {{ units.weight_unit }} per week</span>
             </div>
             <div class="goal-weight-box">
                 <span class="goal-weight-box-head">Left</span>
-                <span>{{ new_weight_log[0][2] - weight_goals.goal_weight }} {{ units.weight_unit }}</span>
+                <span class="goal-weight-box-body">{{ new_weight_log[0][2] - weight_goals.goal_weight }} {{ units.weight_unit }}</span>
             </div>
             <div class="goal-weight-box">
                 <span class="goal-weight-box-head">Time</span>
-                <span>{{ ((new_weight_log[0][2] - weight_goals.goal_weight) / weight_goals.goal_step) | int }} weeks</span>
+                <span class="goal-weight-box-body">{{ ((new_weight_log[0][2] - weight_goals.goal_weight) / weight_goals.goal_step) | int }} weeks</span>
             </div>
         </div>
         {% if errormsg %}
@@ -39,8 +39,8 @@
             </div>
         {% endif %}
         <div class="goal-weight-log-entry">
-            <span>Log Weight</span>
             <form action="/weight/log" method="post">
+                <span>Log Weight</span>
                 <input type="text" placeholder="your current weight" autocomplete="off" name="weight-entry">
                 <button type="submit" class="btn btn-primary">Log</button>
             </form>
@@ -49,7 +49,7 @@
 
         </div>
         <div class="weight-log-wrapper">
-            <h1 class="goal-weight-box-head">My Log</h1>
+            <span>My Entries</span>
             <div class="weight-log">
                 <table class="table table-info table-striped table-hover">
                     <tr>
