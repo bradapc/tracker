@@ -46,7 +46,7 @@
             </form>
         </div>
         <div class="weight-stats">
-
+            <div id="weightPlot" style="width: 100%; max-width:800px"></div>
         </div>
         <div class="weight-log-wrapper">
             <span>My Entries</span>
@@ -125,11 +125,40 @@
     <div class="bmi-visualizer">
     </div>
 <script src="{{ url_for('static', filename='weight_log.js') }}"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="text/javascript">
     current_bmi = '{{ new_weight_log[0][5] }}';
-    if ('{{ new_weight_log }}') {
+    new_weight_log = '{{ new_weight_log }}'
+    weight_entries_arrs = null;
+    if (new_weight_log) {
         weight_entries_json = '{{ new_weight_log | tojson }}';
+        weight_entries_arrs = JSON.parse(weight_entries_json);
     }
     renderBMIScale(current_bmi);
+
+    let xArray = [];
+    let yArray = [];
+
+    for (i = weight_entries_arrs.length; i > 0; i--) {
+        xArray.push(weight_entries_arrs[i - 1][3] + "<br>" + weight_entries_arrs[i - 1][4]);
+        yArray.push(weight_entries_arrs[i - 1][2]);
+    }
+
+    // Define Data
+    const data = [{
+    x:xArray,
+    y:yArray,
+    mode:"lines+markers"
+    }];
+
+    // Define Layout
+    const layout = {
+    xaxis: {range: [xArray[0], xArray[xArray.length]], title: "Time", showgrid: false},
+    yaxis: {range: [yArray[0], yArray[yArray.length]], title: "Weight ({{ units.weight_unit }})", showgrid: false},  
+    title: "Weight Log",
+    colorway: ['#0d63fd']
+    };
+
+    Plotly.newPlot("weightPlot", data, layout, {displayModeBar: false});
 </script>
 {% endblock %}

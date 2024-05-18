@@ -304,3 +304,8 @@ body h1 {
 .edit-weight-input-time {
     width: 30px;
 }
+
+.weight-stats {
+    display: flex;
+    justify-content: center;
+}
