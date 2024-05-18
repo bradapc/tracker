@@ -7,6 +7,7 @@
 {% block body %}
     <h1 class="page-title-header">Weight Log - {{ user }} </h1>
     {% if weight_goals %}
+    <span class="weight-span-header">Goals</span>
         <div class="goal-weight-container">
             <div class="goal-weight-box">
                 <span class="goal-weight-box-head">Current</span>
@@ -38,18 +39,18 @@
                 <p>{{ errormsg }}</p>
             </div>
         {% endif %}
-        <div class="goal-weight-log-entry">
-            <form action="/weight/log" method="post">
-                <span>Log Weight</span>
-                <input type="text" placeholder="your current weight" autocomplete="off" name="weight-entry">
-                <button type="submit" class="btn btn-primary">Log</button>
-            </form>
-        </div>
+        <span class="weight-span-header">Stats</span>
         <div class="weight-stats">
             <div id="weightPlot" style="width: 100%; max-width:800px"></div>
         </div>
+
+        <span class="weight-span-header">Log</span>
         <div class="weight-log-wrapper">
-            <span>My Entries</span>
+            <form class="goal-weight-log-entry" action="/weight/log" method="post">
+                <span>Add</span>
+                <input type="text" placeholder="your current weight" autocomplete="off" name="weight-entry">
+                <button type="submit" class="btn btn-primary">Log</button>
+            </form>
             <div class="weight-log">
                 <table class="table table-info table-striped table-hover">
                     <tr>
@@ -112,6 +113,7 @@
             </div>
         </div>
     {% endif %}
+    <span class="weight-span-header">BMI</span>
     <div class="bmi-info-wrapper">
         <div class="bmi-info">
             <span id="bmi-category-span"></span>
