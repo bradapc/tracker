@@ -71,22 +71,8 @@ def getWeightLog():
 
 def getFormattedDateTime():
     current_time = datetime.now()
-    dt_string = current_time.strftime("%d/%m/%Y %H:%M:%S")
+    dt_string = current_time.strftime("%d/%m/%Y")
     return dt_string
-
-def splitDateTime(weight_log):
-    new_weight_log = []
-    for entry in weight_log:
-        new_entry = []
-        dt_list = entry[3].split()
-        dt_list[1] = dt_list[1][0:5]
-        new_entry.append(entry[0])
-        new_entry.append(entry[1])
-        new_entry.append(entry[2])
-        new_entry.append(dt_list[0])
-        new_entry.append(dt_list[1])
-        new_weight_log.append(new_entry)
-    return new_weight_log
 
 def computeBMI(height, weight, units):
     bmi = 0
@@ -99,9 +85,9 @@ def computeBMI(height, weight, units):
 def addBMI(log, height, units):
     weight_log = []
     for row in log:
-        bmi = computeBMI(height, row[2], units)
+        bmi = computeBMI(height, row['weight'], units)
         bmi_str = "%0.1f" % bmi
-        row.append(bmi_str)
+        row['bmi'] = bmi_str
         weight_log.append(row)
     return weight_log
 
@@ -112,6 +98,25 @@ def getUserGoals():
     user_goals = []
     user_goals = cur.fetchall()
     return user_goals
+
+def isProperDateString(date_input):
+    date = date_input.split("-")
+    if (not (re.search("[0-9][0-9][0-9][0-9]", date[0]) and
+        re.search("0|1[0-9]", date[1]) and
+        re.search("[0-31]", date[2]))):
+            return False
+    return True
+
+def convertWLTupleToList(log):
+    new_log = []
+    for row in log:
+        new_row = {}
+        new_row['log_id'] = row[0]
+        new_row['user_id'] = row[1]
+        new_row['weight'] = row[2]
+        new_row['time'] = row[3]
+        new_log.append(new_row)
+    return new_log
 
 
 @app.route("/")
@@ -211,7 +216,7 @@ def weight():
                 errormsg = "Please enter a number in the height field to set a goal."
                 return render_template("weight.html", errormsg=errormsg)
         
-        #Get current date and time for insertion into database
+        #Get current date for insertion into database
         dt_string = getFormattedDateTime()
 
         #Enter data in database weight_goals table if no weight goal exists
@@ -219,7 +224,6 @@ def weight():
         cur = con.cursor()
         if weightGoalExists():
             cur.execute("UPDATE weight_goals SET goal_weight = ?, goal_step = ?, height = ?, goal_direction = ?, units = ?, time = ? WHERE user_id = ?", (goal_weight, goal_step, height, goal_direction, selected_unit, dt_string, session['user_id']),)
-            #TODO: add log into weight_log for goal updates (goal updates not added yet)
             con.commit()
         else:
             cur.execute("INSERT INTO weight_goals (user_id, goal_weight, goal_step, height, goal_direction, units, time) VALUES(?, ?, ?, ?, ?, ?, ?)", (session['user_id'], goal_weight, goal_step, height, goal_direction, selected_unit, dt_string,))
@@ -237,22 +241,24 @@ def weight_log():
     weight_goals = weightGoalExists()
     if not weight_goals:
         return redirect("/weight")
-    weight_log = getWeightLog()
+    weight_log_tuple = getWeightLog()
+    weight_log = convertWLTupleToList(weight_log_tuple)
     units = getUnits(weight_goals)
-    new_weight_log = splitDateTime(weight_log)
-    new_weight_log = addBMI(new_weight_log, weight_goals['height'], weight_goals['units'])
-    #TODO: Graphs / data
-    #TODO: Lowest weight, bmi, etc.
+    weight_log = addBMI(weight_log, weight_goals['height'], weight_goals['units'])
     if request.method == "POST":
         new_weight_entry = request.form.get("weight-entry")
+        weight_entry_date = request.form.get("date set")
+        if not isProperDateString(weight_entry_date):
+            errormsg = "Invalid date."
+            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log)
         if not new_weight_entry:
             errormsg = "Please enter a weight."
-            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, new_weight_log=new_weight_log)
+            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log)
         try:
             new_weight_entry = float(new_weight_entry)
         except:
             errormsg = "Please enter only numbers into the weight form."
-            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, new_weight_log=new_weight_log)
+            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log)
         dt_string = getFormattedDateTime()
         #Insert entry into database
         con = sqlite3.connect("tracker.db")
@@ -261,7 +267,7 @@ def weight_log():
         con.commit()
         return redirect("/weight/log")
     else:
-        return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals, units=units, new_weight_log=new_weight_log)
+        return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log)
 
 @app.route("/weight/log/delete", methods=["POST"])
 @login_required
@@ -278,20 +284,12 @@ def weight_log_delete():
 def weight_log_edit():
     weight_input = request.form.get("weight edit")
     date_input = request.form.get("date edit")
-    hours_input = request.form.get("hours edit")
-    minutes_input = request.form.get("minutes edit")
-    if not weight_input or not date_input or not hours_input or not minutes_input:
-        return redirect("/weight/log")
-    if hours_input not in [str(i).zfill(2) for i in range(0, 24)]:
-        return redirect("/weight/log")
-    if minutes_input not in [str(i).zfill(2) for i in range(0, 60)]:
+    if not weight_input or not date_input:
         return redirect("/weight/log")
     date = date_input.split("-")
-    if (not (re.search("[0-9][0-9][0-9][0-9]", date[0]) and
-        re.search("0|1[0-9]", date[1]) and
-        re.search("[0-31]", date[2]))):
+    if not isProperDateString(date_input):
         return redirect("/weight/log")
-    dt_string = date[2] + "/" + date[1] + "/" + date[0] + " " + str(hours_input) + ":" + str(minutes_input)
+    dt_string = date[2] + "/" + date[1] + "/" + date[0]
     id = request.form['button edit log']
     con = sqlite3.connect("tracker.db")
     cur = con.cursor()

@@ -11,7 +11,7 @@
         <div class="goal-weight-container">
             <div class="goal-weight-box">
                 <span class="goal-weight-box-head">Current</span>
-                <span class="goal-weight-box-body">{{ new_weight_log[0][2] }} {{units.weight_unit}}</span>
+                <span class="goal-weight-box-body">{{ weight_log[0].weight }} {{units.weight_unit}}</span>
             </div>
             <div class="goal-weight-box">
                 <span class="goal-weight-box-head">Goal</span>
@@ -27,11 +27,11 @@
             </div>
             <div class="goal-weight-box">
                 <span class="goal-weight-box-head">Left</span>
-                <span class="goal-weight-box-body">{{ new_weight_log[0][2] - weight_goals.goal_weight }} {{ units.weight_unit }}</span>
+                <span class="goal-weight-box-body">{{ weight_log[0].weight - weight_goals.goal_weight }} {{ units.weight_unit }}</span>
             </div>
             <div class="goal-weight-box">
                 <span class="goal-weight-box-head">Time</span>
-                <span class="goal-weight-box-body">{{ ((new_weight_log[0][2] - weight_goals.goal_weight) / weight_goals.goal_step) | int }} weeks</span>
+                <span class="goal-weight-box-body">{{ ((weight_log[0].weight - weight_goals.goal_weight) / weight_goals.goal_step) | int }} weeks</span>
             </div>
         </div>
         {% if errormsg %}
@@ -58,22 +58,20 @@
                         <th>Weight ({{ units.weight_unit }})</th>
                         <th>BMI</th>
                         <th>Date</th>
-                        <th>Time</th>
                         <th></th>
                     </tr>
-                    {% for entry in new_weight_log %}
+                    {% for entry in weight_log %}
                     <tr>
-                        <td>{{ entry[2] }}</td>
-                        <td>{{ entry[5] }}</td>
-                        <td> {{ entry[3] }}</td>
-                        <td>{{ entry[4] }}</td>
+                        <td>{{ entry.weight }}</td>
+                        <td>{{ entry.bmi }}</td>
+                        <td> {{ entry.time }}</td>
                         <td class="weight-log-options-td">
                             <!-- Button trigger modal -->
-                            <button type="button" class="weight-log-edit" data-bs-toggle="modal" data-bs-target="#editModal{{ entry[0] }}">
+                            <button type="button" class="weight-log-edit" data-bs-toggle="modal" data-bs-target="#editModal{{ entry.log_id }}">
                                 &#9998;
                             </button>
                             <!-- Modal -->
-                            <div class="modal fade" id="editModal{{ entry[0] }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="editModal{{ entry.log_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -81,31 +79,25 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form id="weight-edit{{ entry[0] }}" class="edit-weight-entry" action="/weight/log/edit" method="post">
+                                        <form id="weight-edit{{ entry.log_id }}" class="edit-weight-entry" action="/weight/log/edit" method="post">
                                             <label for="weight edit">Weight</label>
                                             <div>
-                                                <input type="text" name="weight edit" id="weightinput{{ entry[0] }}" value="{{ entry[2] }}">
+                                                <input type="text" name="weight edit" id="weightinput{{ entry.log_id }}" value="{{ entry.weight }}">
                                                 <span>{{ units.weight_unit }}</span>
                                             </div>
                                             <label for="date edit">Date</label>
-                                            <input type="date" name="date edit" id="dateinput{{ entry[0] }}" value="{{ entry[3][6:10] }}-{{ entry[3][3:5] }}-{{ entry[3][0:2] }}">
-                                            <div class="edit-weight-entry-time-div">
-                                                <label for="time hours">Time</label>
-                                                <input class="edit-weight-input-time" id="hoursinput{{ entry[0] }}" type="text" name="hours edit" maxlength="2" value="{{ entry[4][0:2] }}">
-                                                <span>:</span>
-                                                <input class="edit-weight-input-time" id="minutesinput{{ entry[0] }}" type="text" name="minutes edit" maxlength="2" value="{{ entry[4][3:5] }}">
-                                            </div>
+                                            <input type="date" name="date edit" id="dateinput{{ entry.log_id }}" value="{{ entry.time[6:10] }}-{{ entry.time[3:5] }}-{{ entry.time[0:2] }}">
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                    <button type="button" onclick="resetValues('{{ entry[0] }}')" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" name="button edit log" value="{{ entry[0] }}" form="weight-edit{{ entry[0] }}" class="btn btn-primary">Save Changes</button>
+                                    <button type="button" onclick="resetValues('{{ entry.log_id }}')" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" name="button edit log" value="{{ entry.log_id }}" form="weight-edit{{ entry.log_id }}" class="btn btn-primary">Save Changes</button>
                                     </div>
                                 </div>
                                 </div>
                             </div>
                             <form class="weight-log-form" action="/weight/log/delete" method="post">
-                                <button type="submit" class="weight-log-btn" name="delete log" value="{{ entry[0] }}">&#128465;</button>
+                                <button type="submit" class="weight-log-btn" name="delete log" value="{{ entry.log_id }}">&#128465;</button>
                             </form>
                         </td>
                     </tr>
@@ -118,7 +110,7 @@
     <div class="bmi-info-wrapper">
         <div class="bmi-info">
             <span id="bmi-category-span"></span>
-            <span>Your current BMI is <em>{{ new_weight_log[0][5] }}</em>. Your BMI is shown as a line below
+            <span>Your current BMI is <em>{{ weight_log[0].bmi }}</em>. Your BMI is shown as a line below
                 relative to the BMI categories. Ideally, your BMI should be within the 18-25 range.
                 However, BMI does not account for percentage of muscle vs. body fat, so may be inaccurate
                 in some cases.
@@ -130,11 +122,11 @@
 <script src="{{ url_for('static', filename='weight_log.js') }}"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="text/javascript">
-    current_bmi = '{{ new_weight_log[0][5] }}';
-    new_weight_log = '{{ new_weight_log }}'
+    current_bmi = '{{ weight_log[0].bmi }}';
+    weight_log = '{{ weight_log }}'
     weight_entries_arrs = null;
-    if (new_weight_log) {
-        weight_entries_json = '{{ new_weight_log | tojson }}';
+    if (weight_log) {
+        weight_entries_json = '{{ weight_log | tojson }}';
         weight_entries_arrs = JSON.parse(weight_entries_json);
     }
     renderBMIScale(current_bmi);
@@ -143,8 +135,8 @@
     let yArray = [];
 
     for (i = weight_entries_arrs.length; i > 0; i--) {
-        xArray.push(weight_entries_arrs[i - 1][3] + "<br>" + weight_entries_arrs[i - 1][4]);
-        yArray.push(weight_entries_arrs[i - 1][2]);
+        xArray.push(weight_entries_arrs[i - 1]['time']);
+        yArray.push(weight_entries_arrs[i - 1]['weight']);
     }
 
     // Define Data
@@ -156,7 +148,7 @@
 
     // Define Layout
     const layout = {
-    xaxis: {range: [xArray[0], xArray[xArray.length]], title: "Time", showgrid: false},
+    xaxis: {range: [xArray[0], xArray[xArray.length]], title: "Date", showgrid: false},
     yaxis: {range: [yArray[0], yArray[yArray.length]], title: "Weight ({{ units.weight_unit }})", showgrid: false},  
     title: "Weight Log",
     colorway: ['#0d63fd']
