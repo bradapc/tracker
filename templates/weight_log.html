@@ -27,7 +27,7 @@
             </div>
             <div class="goal-weight-box">
                 <span class="goal-weight-box-head">Left</span>
-                <span class="goal-weight-box-body">{{ weight_log[0].weight - weight_goals.goal_weight }} {{ units.weight_unit }}</span>
+                <span class="goal-weight-box-body">{{ "%0.1f" | format(weight_log[0].weight - weight_goals.goal_weight) }} {{ units.weight_unit }}</span>
             </div>
             <div class="goal-weight-box">
                 <span class="goal-weight-box-head">Time</span>
@@ -43,12 +43,14 @@
         <div class="weight-stats">
             <div id="weightPlot" style="width: 100%; max-width:800px"></div>
         </div>
+        <p>Lowest Weight {{stats.min_weight.weight}} on {{stats.min_weight.time}}</p>
+        <p>Highest Weight {{stats.max_weight.weight}} on {{stats.max_weight.time}}</p>
 
         <span class="weight-span-header">Log</span>
         <div class="weight-log-wrapper">
             <form class="goal-weight-log-entry" action="/weight/log" method="post">
                 <span>Add</span>
-                <input type="text" placeholder="your current weight" autocomplete="off" name="weight-entry">
+                <input type="text" autofocus placeholder="your current weight" autocomplete="off" name="weight-entry">
                 <input type="date" name="date set">
                 <button type="submit" class="btn btn-primary">Log</button>
             </form>

@@ -71,7 +71,7 @@ def getWeightLog():
 
 def getFormattedDateTime():
     current_time = datetime.now()
-    dt_string = current_time.strftime("%d/%m/%Y")
+    dt_string = current_time.strftime("%d-%m-%Y")
     return dt_string
 
 def computeBMI(height, weight, units):
@@ -245,21 +245,28 @@ def weight_log():
     weight_log = convertWLTupleToList(weight_log_tuple)
     units = getUnits(weight_goals)
     weight_log = addBMI(weight_log, weight_goals['height'], weight_goals['units'])
+    min_entry = min(weight_log, key=lambda x:x['weight'])
+    max_entry = max(weight_log, key=lambda x:x['weight'])
+    stats = {
+        'min_weight': min_entry,
+        'max_weight': max_entry
+    }
+    print(stats)
     if request.method == "POST":
         new_weight_entry = request.form.get("weight-entry")
         weight_entry_date = request.form.get("date set")
         if not isProperDateString(weight_entry_date):
             errormsg = "Invalid date."
-            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log)
+            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log, stats=stats)
         if not new_weight_entry:
             errormsg = "Please enter a weight."
-            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log)
+            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log, stats=stats)
         try:
             new_weight_entry = float(new_weight_entry)
         except:
             errormsg = "Please enter only numbers into the weight form."
-            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log)
-        dt_string = getFormattedDateTime()
+            return render_template("weight_log.html", errormsg=errormsg, user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log, stats=stats)
+        dt_string = weight_entry_date
         #Insert entry into database
         con = sqlite3.connect("tracker.db")
         cur = con.cursor()
@@ -267,7 +274,7 @@ def weight_log():
         con.commit()
         return redirect("/weight/log")
     else:
-        return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log)
+        return render_template("weight_log.html", user=session['user'], weight_goals=weight_goals, units=units, weight_log=weight_log, stats=stats)
 
 @app.route("/weight/log/delete", methods=["POST"])
 @login_required
