@@ -49,6 +49,7 @@
             <form class="goal-weight-log-entry" action="/weight/log" method="post">
                 <span>Add</span>
                 <input type="text" placeholder="your current weight" autocomplete="off" name="weight-entry">
+                <input type="date" name="date set">
                 <button type="submit" class="btn btn-primary">Log</button>
             </form>
             <div class="weight-log">
@@ -162,5 +163,14 @@
     };
 
     Plotly.newPlot("weightPlot", data, layout, {displayModeBar: false});
+
+    //get today's date
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        today = yyyy + '-' + mm + '-' + dd;
+        logDateSet = document.getElementsByName("date set");
+        logDateSet[0].value = today;
 </script>
 {% endblock %}
