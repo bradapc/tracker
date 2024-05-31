@@ -46,6 +46,8 @@
         <div class="weight-stats-boxes-wrapper">
             <div class="goal-weight-box">
                 <span class="stat-weight-box-head">Streak</span>
+                <span class="stat-weight-box-body">{{stats.streak}}</span>
+                <span class="stat-weight-box-date">days</span>
             </div>
             <div class="goal-weight-box">
                 <span class="stat-weight-box-head">Lowest Weight</span>
@@ -60,9 +62,9 @@
             <div class="goal-weight-box">
                 <span class="stat-weight-box-head">Progress</span>
                 {%if (weight_log[weight_log|length - 1].weight - weight_log[0].weight) > 1 %}
-                    <span class="span-lose-text">{{stats.weight_diff}} {{ units.weight_unit }}</span>
+                    <span class="span-lose-text">{{"%0.1f"|format(stats.weight_diff)}} {{ units.weight_unit }}</span>
                 {% elif (weight_log[weight_log|length - 1].weight - weight_log[0].weight) < 1 %}
-                    <span class="span-gain-text">+{{stats.weight_diff}} {{ units.weight_unit }}</span>
+                    <span class="span-gain-text">+{{"%0.1f"|format(stats.weight_diff)}} {{ units.weight_unit }}</span>
                 {% endif %}
                 <span class="stat-weight-box-date">over {{ stats.days_diff }} days</span>
             </div>

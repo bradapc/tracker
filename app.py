@@ -252,16 +252,29 @@ def weight_log():
     date_format = "%Y-%m-%d"
     first_entry = weight_log[len(weight_log) - 1]
     last_entry = weight_log[0]
-    a = datetime.strptime(first_entry['time'], date_format)
-    b = datetime.strptime(last_entry['time'], date_format)
-    delta = b - a
+    first_entry_date = datetime.strptime(first_entry['time'], date_format)
+    last_entry_date = datetime.strptime(last_entry['time'], date_format)
+    delta = last_entry_date - first_entry_date
     weight_diff = last_entry['weight'] - first_entry['weight']
+
+    #Stats for streak
+    log_streak = 0
+    for i in range(0, len(weight_log)):
+        current_entry = weight_log[i]
+        current_entry_date = datetime.strptime(current_entry['time'], date_format)
+        time_diff = last_entry_date - current_entry_date
+        if time_diff.days == i:
+            log_streak += 1
+            continue
+        else:
+            break
 
     stats = {
         'min_weight': min_entry,
         'max_weight': max_entry,
         'weight_diff': weight_diff,
-        'days_diff': delta.days
+        'days_diff': delta.days,
+        'streak': log_streak
     }
     if request.method == "POST":
         new_weight_entry = request.form.get("weight-entry")
