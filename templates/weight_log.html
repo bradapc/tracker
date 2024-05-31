@@ -45,14 +45,26 @@
         </div>
         <div class="weight-stats-boxes-wrapper">
             <div class="goal-weight-box">
+                <span class="stat-weight-box-head">Streak</span>
+            </div>
+            <div class="goal-weight-box">
                 <span class="stat-weight-box-head">Lowest Weight</span>
                 <span class="stat-weight-box-body">{{stats.min_weight.weight}} {{units.weight_unit}}</span>
-                <span class="stat-weight-box-date">{{stats.min_weight.time}}</span>
+                <span class="stat-weight-box-date">on {{stats.min_weight.time}}</span>
             </div>
             <div class="goal-weight-box">
                 <span class="stat-weight-box-head">Highest Weight</span>
                 <span class="stat-weight-box-body">{{stats.max_weight.weight}} {{units.weight_unit}}</span>
-                <span class="stat-weight-box-date">{{stats.max_weight.time}}</span>
+                <span class="stat-weight-box-date">on {{stats.max_weight.time}}</span>
+            </div>
+            <div class="goal-weight-box">
+                <span class="stat-weight-box-head">Progress</span>
+                {%if (weight_log[weight_log|length - 1].weight - weight_log[0].weight) > 1 %}
+                    <span class="span-lose-text">{{stats.weight_diff}} {{ units.weight_unit }}</span>
+                {% elif (weight_log[weight_log|length - 1].weight - weight_log[0].weight) < 1 %}
+                    <span class="span-gain-text">+{{stats.weight_diff}} {{ units.weight_unit }}</span>
+                {% endif %}
+                <span class="stat-weight-box-date">over {{ stats.days_diff }} days</span>
             </div>
         </div>
 

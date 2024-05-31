@@ -192,6 +192,14 @@ input:focus {
     font-size: 22px;
 }
 
+.span-lose-text {
+    color: green;
+}
+
+.span-gain-text {
+    color: red;
+}
+
 .weight-log table {
     border: 1px solid black;
 }

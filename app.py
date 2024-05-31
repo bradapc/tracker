@@ -247,11 +247,22 @@ def weight_log():
     weight_log = addBMI(weight_log, weight_goals['height'], weight_goals['units'])
     min_entry = min(weight_log, key=lambda x:x['weight'])
     max_entry = max(weight_log, key=lambda x:x['weight'])
+
+    #Stats for progress over log
+    date_format = "%Y-%m-%d"
+    first_entry = weight_log[len(weight_log) - 1]
+    last_entry = weight_log[0]
+    a = datetime.strptime(first_entry['time'], date_format)
+    b = datetime.strptime(last_entry['time'], date_format)
+    delta = b - a
+    weight_diff = last_entry['weight'] - first_entry['weight']
+
     stats = {
         'min_weight': min_entry,
-        'max_weight': max_entry
+        'max_weight': max_entry,
+        'weight_diff': weight_diff,
+        'days_diff': delta.days
     }
-    print(stats)
     if request.method == "POST":
         new_weight_entry = request.form.get("weight-entry")
         weight_entry_date = request.form.get("date set")
