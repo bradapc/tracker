@@ -43,8 +43,18 @@
         <div class="weight-stats">
             <div id="weightPlot" style="width: 100%; max-width:800px"></div>
         </div>
-        <p>Lowest Weight {{stats.min_weight.weight}} on {{stats.min_weight.time}}</p>
-        <p>Highest Weight {{stats.max_weight.weight}} on {{stats.max_weight.time}}</p>
+        <div class="weight-stats-boxes-wrapper">
+            <div class="goal-weight-box">
+                <span class="stat-weight-box-head">Lowest Weight</span>
+                <span class="stat-weight-box-body">{{stats.min_weight.weight}} {{units.weight_unit}}</span>
+                <span class="stat-weight-box-date">{{stats.min_weight.time}}</span>
+            </div>
+            <div class="goal-weight-box">
+                <span class="stat-weight-box-head">Highest Weight</span>
+                <span class="stat-weight-box-body">{{stats.max_weight.weight}} {{units.weight_unit}}</span>
+                <span class="stat-weight-box-date">{{stats.max_weight.time}}</span>
+            </div>
+        </div>
 
         <span class="weight-span-header">Log</span>
         <div class="weight-log-wrapper">
