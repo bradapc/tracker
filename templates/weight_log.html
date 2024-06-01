@@ -132,6 +132,68 @@
             </div>
         </div>
     {% endif %}
+    <p>
+        <a class="btn btn-primary" data-bs-toggle="collapse" href="#tdeeCalc" role="button" aria-expanded="false" aria-controls="tdeeCalc">
+          TDEE Calculator
+        </a>
+      </p>
+      <div class="collapse" id="tdeeCalc">
+        <div class="card card-body">
+            <h5>TDEE Calculator</h5>
+            <p>TDEE (Total Daily Energy Expenditure) is how many calories you burn per day.
+                This includes your BMR (Basal Metabolic Rate). Your BMR informs of calories
+                expended to sustain life, while your TDEE captures BMR and exercise activity.
+                You can use TDEE as an estimate to lose, gain, or maintain your weight.
+                Try it out below!
+            </p>
+            <div class="tdeeCalcWrapper">
+                <div class="bmrCalc-wrapper">
+                    <label for="tdeeAge">Age</label>
+                    <input id="tdeeAge" name="tdeeAge" type="text">
+                    <label for="tdeeWeight">Weight</label>
+                    <input id="tdeeWeight" name="tdeeWeight" placeholder="kg">
+                    <label for="tdeeHeight">Height</label>
+                    <input id="tdeeHeight" name="tdeeHeight" placeholder="cm">
+                    <div class="tdeeSexWrapper">
+                        <input type="radio" id="tdeeMale" name="tdeeSex" value="tdeeMale" checked>
+                        <label for="tdeeMale">Male</label>
+                        <input type="radio" id="tdeeFemale" name="tdeeSex" value="tdeeFemale">
+                        <label for="tdeeFemale">Female</label>
+                    </div>
+                    <button type="button" id="buttonCalcTDEE" class="btn btn-primary">Calculate</button>
+                </div>
+                <div class="tdeeRadio-wrapper">
+                    <div class="activityLevel">
+                        <div>
+                            <input type="radio" id="sedex" name="activity-level" value="sedex" checked>
+                            <label for="sedex">Sedentary</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="lightex" name="activity-level" value="lightex">
+                            <label for="lightex">Light exercise (1-2x/week)</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="modex" name="activity-level" value="modex">
+                            <label for="modex">Moderate exercise (2-3x/week)</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="hardex" name="activity-level" value="hardex">
+                            <label for="hardex">Hard exercise (4-5x/week)</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="athex" name="activity-level" value="athex">
+                            <label for="athex">Professional athlete</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="tdeeResults-wrapper">
+                    <span id="bmrSpan">BMR: </span>
+                    <span id="tdeeSpan">TDEE: </span>
+                </div>
+        </div>
+        </div>
+      </div>
+
     <span class="weight-span-header">BMI</span>
     <div class="bmi-info-wrapper">
         <div class="bmi-info">

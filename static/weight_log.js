@@ -93,3 +93,56 @@ function resetValues(id) {
     hours_input.value = current_log[4].slice(0, 2);
     minutes_input.value = current_log[4].slice(3, 5);
 }
+
+//TDEE Calculator
+tdeeAgeInput = document.getElementById("tdeeAge").value;
+tdeeWeightInput = document.getElementById("tdeeWeight").value;
+tdeeHeightInput = document.getElementById("tdeeHeight").value;
+tdeeSubmit = document.getElementById("buttonCalcTDEE");
+tdeeSubmit.addEventListener("click", calculateBMR);
+tdeeRadioMale = document.getElementById("tdeeMale");
+tdeeRadioFemale = document.getElementById("tdeeFemale");
+
+tdeeAge = parseFloat(tdeeAgeInput);
+tdeeWeight = parseFloat(tdeeWeightInput);
+tdeeHeight = parseFloat(tdeeHeightInput);
+
+bmr = 0;
+activityMultiplier = 0;
+tdee = 0;
+
+activityRadios = document.getElementsByName("activity-level");
+for (i = 0; i < activityRadios.length; i++) {
+    activityRadios[i].addEventListener("click", updateTDEE);
+}
+
+activity = {}
+activity['sedex'] = 1.2;
+activity['lightex'] = 1.375;
+activity['modex'] = 1.55;
+activity['hardex'] = 1.725;
+activity['athex'] = 1.9;
+
+function calculateBMR() {
+    if (tdeeRadioMale.checked) {
+        bmr = 66.5 + (13.75 * tdeeWeight) + (5.003 * tdeeHeight) - (6.75 * tdeeAge);
+    } else if(tdeeRadioFemale.checked) {
+        bmr = 655.1 + (9.563 * tdeeWeight) + (1.850 * tdeeHeight) - (4.676 * tdeeAge);
+    }
+    bmrSpan = document.getElementById("bmrSpan");
+    bmrSpan.innerHTML = "BMR: " + parseInt(bmr) + " kcal/day";
+    bmrSpan.style.display = "inline-block";
+    updateTDEE();
+}
+
+function updateTDEE() {
+    for (i = 0; i < activityRadios.length; i++) {
+        if (activityRadios[i].checked) {
+            activityMultiplier = activity[activityRadios[i].value];
+        }
+    }
+    tdee = bmr * activityMultiplier;
+    tdeeSpan = document.getElementById("tdeeSpan");
+    tdeeSpan.innerHTML = "TDEE: " + parseInt(tdee) + " kcal/day";
+    tdeeSpan.style.display = "inline-block";
+}
