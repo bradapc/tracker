@@ -95,21 +95,12 @@ function resetValues(id) {
 }
 
 //TDEE Calculator
-tdeeAgeInput = document.getElementById("tdeeAge").value;
-tdeeWeightInput = document.getElementById("tdeeWeight").value;
-tdeeHeightInput = document.getElementById("tdeeHeight").value;
-tdeeSubmit = document.getElementById("buttonCalcTDEE");
-tdeeSubmit.addEventListener("click", calculateBMR);
-tdeeRadioMale = document.getElementById("tdeeMale");
-tdeeRadioFemale = document.getElementById("tdeeFemale");
-
-tdeeAge = parseFloat(tdeeAgeInput);
-tdeeWeight = parseFloat(tdeeWeightInput);
-tdeeHeight = parseFloat(tdeeHeightInput);
-
 bmr = 0;
 activityMultiplier = 0;
 tdee = 0;
+
+tdeeSubmit = document.getElementById("buttonCalcTDEE");
+tdeeSubmit.addEventListener("click", calculateBMR);
 
 activityRadios = document.getElementsByName("activity-level");
 for (i = 0; i < activityRadios.length; i++) {
@@ -124,6 +115,15 @@ activity['hardex'] = 1.725;
 activity['athex'] = 1.9;
 
 function calculateBMR() {
+    tdeeAgeInput = document.getElementById("tdeeAge").value;
+    tdeeWeightInput = document.getElementById("tdeeWeight").value;
+    tdeeHeightInput = document.getElementById("tdeeHeight").value;
+    tdeeRadioMale = document.getElementById("tdeeMale");
+    tdeeRadioFemale = document.getElementById("tdeeFemale");
+
+    tdeeAge = parseFloat(tdeeAgeInput);
+    tdeeWeight = parseFloat(tdeeWeightInput);
+    tdeeHeight = parseFloat(tdeeHeightInput);
     if (tdeeRadioMale.checked) {
         bmr = 66.5 + (13.75 * tdeeWeight) + (5.003 * tdeeHeight) - (6.75 * tdeeAge);
     } else if(tdeeRadioFemale.checked) {

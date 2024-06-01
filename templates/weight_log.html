@@ -132,11 +132,15 @@
             </div>
         </div>
     {% endif %}
-    <p>
+    <span class="weight-span-header">Tools</span>
+    <div class="toolsController">
         <a class="btn btn-primary" data-bs-toggle="collapse" href="#tdeeCalc" role="button" aria-expanded="false" aria-controls="tdeeCalc">
           TDEE Calculator
         </a>
-      </p>
+        <a class="btn btn-primary" data-bs-toggle="collapse" href="#bmiInfo" role="button" aria-expanded="false" aria-controls="bmiInfo">
+            BMI
+        </a>
+    </div>
       <div class="collapse" id="tdeeCalc">
         <div class="card card-body">
             <h5>TDEE Calculator</h5>
@@ -193,19 +197,22 @@
         </div>
         </div>
       </div>
-
-    <span class="weight-span-header">BMI</span>
-    <div class="bmi-info-wrapper">
-        <div class="bmi-info">
-            <span id="bmi-category-span"></span>
-            <span>Your current BMI is <em>{{ weight_log[0].bmi }}</em>. Your BMI is shown as a line below
-                relative to the BMI categories. Ideally, your BMI should be within the 18-25 range.
-                However, BMI does not account for percentage of muscle vs. body fat, so may be inaccurate
-                in some cases.
-            </span>
+    <div class="collapse" id="bmiInfo">
+        <div class="card card-body">
+            <span class="weight-span-header">BMI</span>
+            <div class="bmi-info-wrapper">
+                <div class="bmi-info">
+                    <span id="bmi-category-span"></span>
+                    <span>Your current BMI is <em>{{ weight_log[0].bmi }}</em>. Your BMI is shown as a line below
+                        relative to the BMI categories. Ideally, your BMI should be within the 18-25 range.
+                        However, BMI does not account for percentage of muscle vs. body fat, so may be inaccurate
+                        in some cases.
+                    </span>
+                </div>
+            </div>
+            <div class="bmi-visualizer">
+            </div>
         </div>
-    </div>
-    <div class="bmi-visualizer">
     </div>
 <script src="{{ url_for('static', filename='weight_log.js') }}"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>

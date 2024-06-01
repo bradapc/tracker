@@ -365,3 +365,13 @@ body h1 {
     flex-direction: row;
     gap: 32px;
 }
+
+.toolsController {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+body {
+    padding-bottom: 200px;
+}
